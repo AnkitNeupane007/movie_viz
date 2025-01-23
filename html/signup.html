@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="absolute top-4 left-4">
+        <a href="index.html" class="text-blue-500 font-bold hover:underline">
+          ← Back to Home
+        </a>
+      </div>
+
+  <div class="bg-white shadow-md rounded-lg p-8 max-w-md w-full">
+    <h1 class="text-2xl font-bold text-center mb-6">Sign Up</h1>
+    <form action="#" method="POST" class="space-y-4">
+      <!-- Role Selection -->
+      <div>
+        <label for="role" class="block text-gray-700 font-medium mb-2">Role</label>
+        <select id="role" name="role" required class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+          <option value="reviewer">Reviewer</option>
+        </select>
+      </div>
+
+      <!-- Full Name -->
+      <div>
+        <label for="name" class="block text-gray-700 font-medium mb-2">Full Name</label>
+        <input type="text" id="name" name="name" required placeholder="Enter your full name" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
+        <input type="email" id="email" name="email" required placeholder="Enter your email" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label for="password" class="block text-gray-700 font-medium mb-2">Password</label>
+        <input type="password" id="password" name="password" required placeholder="Create a password" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+      </div>
+
+      <!-- Submit Button -->
+      <div>
+        <button type="submit" class="w-full bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition">
+          Sign Up
+        </button>
+      </div>
+    </form>
+  </div>
+
+</body>
+</html>
