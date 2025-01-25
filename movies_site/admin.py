@@ -8,4 +8,4 @@ admin = Blueprint('admin', __name__)
 @admin.route('/')
 @role_required('admin')
 def admin_dashboard():
-    return render_template('<p>This is admin</>')
+    return render_template('<p>This is admin</p>')
