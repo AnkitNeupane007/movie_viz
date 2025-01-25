@@ -1,0 +1,89 @@
+{% extends "base.html" %} {% block title %}Login{% endblock %} {% block content
+%}
+
+<div class="flex justify-center min-h-screen bg-gray-100">
+	<div class="bg-white shadow-md rounded-lg p-8 max-w-md w-full">
+		<h1 class="text-2xl font-bold text-center mb-6">Login</h1>
+		<form
+			action="{{ url_for('auth.login_user') }}"
+			method="POST"
+			class="space-y-4"
+		>
+			<div>
+				<label for="role" class="block text-gray-700 font-medium mb-2"
+					>Role</label
+				>
+				<select
+					id="role"
+					name="role"
+					required
+					class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+				>
+					<option value="admin">Admin</option>
+					<option value="reviewer">Reviewer</option>
+				</select>
+			</div>
+			<div>
+				<label for="email" class="block text-gray-700 font-medium mb-2"
+					>Email</label
+				>
+				<input
+					type="email"
+					id="email"
+					name="email"
+					required
+					class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+					placeholder="Enter email"
+				/>
+			</div>
+			<div>
+				<label for="username" class="block text-gray-700 font-medium mb-2"
+					>Username</label
+				>
+				<input
+					type="username"
+					id="username"
+					name="username"
+					required
+					class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+					placeholder="Enter username"
+					/>
+			</div>
+			<div>
+				<label for="password" class="block text-gray-700 font-medium mb-2"
+					>Password</label
+				>
+				<input
+					type="password"
+					id="password"
+					name="password"
+					required
+					class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+					placeholder="Enter password"
+					/>
+			</div>
+			<br />
+			<div>
+				<button
+					type="submit"
+					class="w-full bg-blue-500 text-white font-bold mt-6 py-2 px-4 rounded-lg hover:bg-blue-600 transition"
+				>
+					Login
+				</button>
+			</div>
+			<div class="flex pt-6 justify-center">
+				<p>
+					Don't have an account?
+					<br />
+					<a
+						href="{{ url_for('auth.signup_user') }}"
+						class="font-semibold text-blue-800 hover:text-blue-400 underline pl-10"
+					>
+						Sign Up
+					</a>
+				</p>
+			</div>
+		</form>
+	</div>
+</div>
+{% endblock %}
