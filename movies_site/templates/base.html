@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>{% block title %}Movie Search{% endblock %}</title>
 		<script src="https://cdn.tailwindcss.com"></script>
+		<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 		{% block styles %}{% endblock %}
 	</head>
 	<body class="bg-gray-100 font-sans">
@@ -122,7 +123,7 @@
 		{% endif %} {% endfor %} {% endif %} {% endwith %}
 
 		<!-- Main Content -->
-		<div class="container mx-auto mt-8 p-1">
+		<div class="container mx-auto mt-2 p-1">
 			{% block content %}
 			<main class="container mx-auto mt-8 p-4">
 				<h1 class="text-2xl font-bold text-center mb-4">Search Movies</h1>
