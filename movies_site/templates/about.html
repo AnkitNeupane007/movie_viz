@@ -1,0 +1,26 @@
+{% extends "base.html" %} {% block title %}About Page{% endblock %} {% block
+content %}
+
+<section
+	id="about"
+	class="container mx-auto mt-12 p-6 bg-white shadow-md rounded-lg"
+>
+	<h2 class="text-2xl font-bold mb-4 text-center">Meet Our Contributors</h2>
+	<div class="relative overflow-hidden h-40">
+		<div
+			id="contributor"
+			class="absolute inset-0 flex items-center justify-center"
+		>
+			<!-- Contributor details will be dynamically injected -->
+		</div>
+	</div>
+</section>
+
+{% endblock %} {% block scripts %}
+<script src="{{ url_for('static', filename='js/about.js') }}"></script>
+{% endblock %} {% block styles %}
+<link
+	rel="stylesheet"
+	href="{{ url_for('static', filename='css/about.css') }}"
+/>
+{% endblock %}
