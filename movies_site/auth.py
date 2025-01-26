@@ -60,14 +60,7 @@ def signup_user():
             hashed_password = generate_password_hash(password1, method='pbkdf2:sha256')
             
             try:
-                conn = get_db()
-                cursor = conn.cursor()
-                cursor.execute("""
-                    INSERT INTO users (role, email, username, password)
-                    VALUES (?, ?, ?, ?)
-                """, (role, email, username, hashed_password))
-                conn.commit()
-                conn.close()
+                create_user(role, email, username, hashed_password)
             
                 flash('Account created!', category='success')   
                 return redirect(url_for('auth.login_user'))

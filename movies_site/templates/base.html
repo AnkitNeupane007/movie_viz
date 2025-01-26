@@ -122,35 +122,88 @@
 		{% endif %} {% endfor %} {% endif %} {% endwith %}
 
 		<!-- Main Content -->
-		<div class="container mx-auto mt-8 p-1">
+		<div class="flex mx-auto mt-8 p-1">
 			{% block content %}
-			<main class="container mx-auto mt-8 p-4">
+			<main class="container mx-auto mt-8 p-2">
 				<h1 class="text-2xl font-bold text-center mb-4">Search Movies</h1>
-				<div class="flex justify-center mb-8">
-				  <div class="relative w-full max-w-md">
-					<input 
-					  type="text" 
-					  placeholder="Search for a movie..." 
-					  class="w-full border border-gray-300 rounded-lg p-3 pl-10 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-					/>
-					<svg 
-					  xmlns="http://www.w3.org/2000/svg" 
-					  class="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" 
-					  fill="none" 
-					  viewBox="0 0 24 24" 
-					  stroke="currentColor">
-					  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1012 19.5a7.5 7.5 0 004.35-1.35z" />
-					</svg>
-					<button 
+				<div class="flex justify-center mb-4">
+					<div class="relative w-full max-w-md flex items-center">
+					  <!-- Search Bar -->
+					  <form 
+						action="{{ url_for('views.search_movie') }}" 
+						method="POST" 
+						class="flex-grow relative"
+					  >
+						<input 
+						  type="text" 
+						  id="movie" 
+						  name="movie" 
+						  placeholder="Search for a movie..." 
+						  class="w-full border border-gray-300 rounded-lg p-3 pl-10 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+						/>
+						<svg 
+						  xmlns="http://www.w3.org/2000/svg" 
+						  class="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" 
+						  fill="none" 
+						  viewBox="0 0 24 24" 
+						  stroke="currentColor">
+						  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1012 19.5a7.5-7.5 0 004.35-1.35z" />
+						</svg>
+						<button 
 					  class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
 					  ⚙️
 					</button>
+					  </form>
+					  <!-- Shuffle Button -->
+					  <form 
+						action="{{ url_for('views.random_movie') }}" 
+						method="POST" 
+						class="ml-3"
+					  >
+						<button>
+						  <img 
+							src="{{ url_for('static', filename='images/shuffle.svg') }}" 
+							class="h-10 w-10" 
+							alt="shuffle"
+						  >
+						</button>
+					  </form>
+					</div>
 				  </div>
-				</div>
-			{% endblock %}
-		</div>
+				
 
+
+
+					  
+				{% if information %}
+				<div class="card justify-center mx-auto mt-12">
+					<div class="content">
+						<p><strong>Title:</strong> {{ information[0] }}</p>
+						<p><strong>Tagline:</strong> {{ information[3] }}</p>
+						<p><strong>Genre:</strong> {{ information[11] }}</p>
+						<p><strong>Cast:</strong> {{ information[12] }}</p>
+						<p><strong>Director:</strong> {{ information[8] }}</p>
+						<p><strong>Release Date:</strong> {{ information[1] }}</p>
+						<p><strong>Runtime:</strong> {{ information[2] }} minutes</p>
+						<p><strong>Overview:</strong> {{ information[4] }}</p>
+						<p><strong>Budget:</strong> ${{ information[5] }}</p>
+						<p><strong>Revenue:</strong> ${{ information[6] }}</p>
+						<p><strong>Original Language:</strong> {{ information[7] }}</p>
+						<p><strong>Production Companies:</strong> {{ information[9] }}</p>
+						<p><strong>Rating:</strong> {{ information[10] }}</p>
+					</div>
+				</div>
+				{% endif %}
+
+
+
+						{% endblock %}
+			</div>
+			</main>
 		<!-- Page-Specific Scripts -->
-		{% block scripts %}{% endblock %}
+		{% block scripts %}<link
+		rel="stylesheet"
+		href="{{ url_for('static', filename='css/search.css') }}"
+	/>{% endblock %}
 	</body>
 </html>
