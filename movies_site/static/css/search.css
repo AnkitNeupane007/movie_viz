@@ -2,7 +2,7 @@
 	position: relative;
 	width: 400px;
 	height: 500px;
-	background: #f00;
+	background: rgb(54, 53, 53);
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -16,7 +16,7 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: linear-gradient(315deg, #03a9f4, #ff0058);
+	background: linear-gradient(315deg, #90a2aa, #beb7ba);
 }
 
 .card::after {
@@ -26,7 +26,7 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: linear-gradient(315deg, #03a9f4, #ff0058);
+	background: linear-gradient(315deg, #c4c4c4, #030303);
 	filter: blur(30px);
 }
 

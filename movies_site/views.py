@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, render_template, request, redirect, url_for, flash
 import sqlite3
 from .db import *
+import random
 
 views = Blueprint('views', __name__)
 
@@ -27,4 +28,16 @@ def search_movie():
             flash('Movie not found', category='error')
             return redirect(url_for('views.home'))
     
+    return redirect(url_for('views.home'))
+
+@views.route('/random', methods=['GET', 'POST'])
+def random_movie():
+    
+    if request.method == 'POST':
+        movie_id = random.randint(1, 2951)
+        
+        movie_information = display_movie(movie_id)[0]
+            
+        return render_template('base.html', information=movie_information)
+        
     return redirect(url_for('views.home'))
