@@ -2,11 +2,13 @@
 	position: relative;
 	width: 400px;
 	height: 500px;
-	background: rgb(54, 53, 53);
+	background: rgb(28, 18, 18);
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	overflow: hidden; /* To ensure content stays inside */
+	border-radius: 15px;
+	padding-left: 6px;
 }
 
 .card::before {
@@ -16,7 +18,7 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: linear-gradient(315deg, #90a2aa, #beb7ba);
+	background: linear-gradient(315deg, #8fb3c3, #c297aa);
 }
 
 .card::after {
@@ -26,8 +28,8 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: linear-gradient(315deg, #c4c4c4, #030303);
-	filter: blur(30px);
+	background: linear-gradient(315deg, #5e3c3c, #670202);
+	filter: blur(20px);
 }
 
 .card b {
@@ -62,7 +64,7 @@
 .content p {
 	margin: 5px 0;
 	font-size: 0.9em;
-	color: white;
+	color: rgb(252, 252, 5);
 }
 
 .content strong {
@@ -72,10 +74,10 @@
 
 .content .title {
 	position: relative;
-	color: #fff;
+	color: #aeb4ef;
 	font-weight: 500;
 	line-height: 1em;
-	font-size: 1em;
+	font-size: 1.5em;
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
 	text-align: center;
@@ -83,7 +85,7 @@
 
 .content .title span {
 	font-weight: 300;
-	font-size: 0.7em;
+	font-size: 0.9em;
 }
 
 .content .sci {
@@ -125,4 +127,28 @@
 .sci li a:hover {
 	fill: currentColor;
 	color: rgba(255, 255, 255, 1);
+}
+
+.bg-image {
+    position: relative;
+    background-image: url('../images/background.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.bg-image::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(223, 204, 204, 0.3); /* Adjust the opacity here */
+	border-radius: 10px;
+    z-index: 1;
+}
+
+.bg-image > * {
+    position: relative;
+    z-index: 2;
 }
