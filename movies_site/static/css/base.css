@@ -128,7 +128,7 @@
 	fill: currentColor;
 	color: rgba(255, 255, 255, 1);
 }
-
+/* home page background image */
 .bg-image {
     position: relative;
     background-image: url('../images/background.png');
