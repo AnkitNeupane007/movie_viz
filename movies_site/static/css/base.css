@@ -29,7 +29,7 @@
 	width: 100%;
 	height: 100%;
 	background: linear-gradient(315deg, #5e3c3c, #670202);
-	filter: blur(20px);
+	filter: blur(10px);
 }
 
 .card b {
@@ -128,7 +128,7 @@
 	fill: currentColor;
 	color: rgba(255, 255, 255, 1);
 }
-
+/* home page background image */
 .bg-image {
     position: relative;
     background-image: url('../images/background.png');
