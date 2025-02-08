@@ -85,7 +85,15 @@ p {
 	font-family: "Playfair Display", serif;
 	font-weight: 900;
 }
-
+h1 {
+	font-family: "Playfair Display", serif;
+	font-weight: 900;
+	transition: color 0.3s ease, transform 0.3s ease;
+}
+h1:hover {
+    color: #467ee5; /* Change color on hover */
+    transform: scale(1.1); /* Slightly increase size on hover */
+}
 /* Responsive Styling */
 @media (max-width: 1200px) {
 	.flip-card {
