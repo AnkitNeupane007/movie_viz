@@ -64,9 +64,9 @@
 							<li>
 								<button>
 									<a href="{{ url_for(session.get('role') + '.' + session.get('role') + '_dashboard') }}"
-										class="text-lg font-semibold hover:text-gray-400">Dashboard</a>
+										class="text-lg font-semibold hover:text-gray-400 block px-4 py-2">Dashboard</a>
 								</button>
-							</li>
+							</li>							
 							{% endif %}
 							{% endif %}
 							{% if session.get('role') == 'admin' or session.get('role') == 'reviewer' %}
@@ -192,7 +192,11 @@
 	</main>
 	<!-- Page-Specific Scripts -->
 	{% block scripts %}
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />{% endblock %}
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}"
+	/>
+	<script src="{{ url_for('static', filename='js/popup.js') }}"></script>
+	{% endblock %}
 </body>
 
 </html>

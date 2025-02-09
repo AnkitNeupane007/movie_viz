@@ -60,10 +60,14 @@
 		</div>
 	</section>
 	{% endblock %} {% block scripts %}
-	<script src="{{ url_for('static', filename='js/about.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/popup.js') }}"></script>
 	{% endblock %} {% block styles %}
 	<link
 		rel="stylesheet"
 		href="{{ url_for('static', filename='css/about.css') }}"
+	/>
+	<link
+		rel="stylesheet"
+		href="{{ url_for('static', filename='css/popup.css') }}"
 	/>
 	{% endblock %}
