@@ -30,24 +30,50 @@
 				<a href="{{ url_for('admin.admin_dashboard') }}"
 					class="text-lg font-semibold hover:text-gray-400">Dashboard</a>
 				{% endif %}
-				{% endif %}
 				<a href="{{ url_for('views.about') }}" class="text-lg font-semibold hover:text-gray-400">About</a>
 			</div>
-			<div>
-				{% if session.get('user_id') %}
-				<!-- Show Log Out link -->
-				<a href="{{ url_for('auth.logout_user') }}" class="text-lg font-semibold hover:text-gray-400">Log
-					Out</a>
-				{% else %}
-				<!-- Show Login and Sign Up links if not logged in -->
-				<a href="{{ url_for('auth.login_user') }}"
-					class="text-lg font-semibold hover:text-gray-400 px-2">Login</a>
-				<a href="{{ url_for('auth.signup_user') }}" class="text-lg font-semibold hover:text-gray-400">Sign
-					Up</a>
-				{% endif %}
+			<div class="flex items-center space-x-4">
+				<svg stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none"
+					viewBox="0 0 24 24" height="14" width="14" xmlns="http://www.w3.org/2000/svg">
+					<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+					<circle r="4" cy="7" cx="9"></circle>
+					<path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+					<path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+				</svg>
+				<span>{{ session.get('user_id') }} </span>
+				</button>
 
+				<div>
+
+					<!-- Popup Menu -->
+					<label class="popup">
+						<input type="checkbox">
+						<div class="burger" tabindex="0">
+							<span></span>
+							<span></span>
+							<span></span>
+						</div>
+
+						<nav class="popup-window">
+							<ul>
+								<li>
+									<button>
+										<a href="{{ url_for('auth.logout_user') }}"
+											class="text-lg font-semibold hover:text-gray-400">Log Out</a>
+									</button>
+								</li>
+							</ul>
+						</nav>
+					</label>
+					{% else %}
+					<!-- Show Login and Sign Up links if not logged in -->
+					<a href="{{ url_for('auth.login_user') }}"
+						class="text-lg font-semibold hover:text-gray-400 px-2">Login</a>
+					<a href="{{ url_for('auth.signup_user') }}" class="text-lg font-semibold hover:text-gray-400">Sign
+						Up</a>
+					{% endif %}
+				</div>
 			</div>
-		</div>
 	</header>
 
 	{% with messages = get_flashed_messages(with_categories=true) %} {% if
@@ -103,7 +129,8 @@
 						</button>
 					</form>
 					<!-- Shuffle Button -->
-					<form action="{{ url_for('views.random_movie') }}" method="POST" class="ml-3 top-1/2 transform -translate-y-5">
+					<form action="{{ url_for('views.random_movie') }}" method="POST"
+						class="ml-3 top-1/2 transform -translate-y-5">
 						<button>
 							<img src="{{ url_for('static', filename='images/shuffle.png') }}" class="h-8 w-8"
 								alt="shuffle">
@@ -143,7 +170,10 @@
 	</main>
 	<!-- Page-Specific Scripts -->
 	{% block scripts %}
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />{% endblock %}
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}" />
+	<script src="{{ url_for('static', filename='js/popup.js') }}"></script>
+	{% endblock %}
 </body>
 
 </html>

@@ -145,6 +145,7 @@
     height: 100%;
     background: rgba(223, 204, 204, 0.3); /* Adjust the opacity here */
 	border-radius: 10px;
+	pointer-events: none;
     z-index: 1;
 }
 
@@ -152,3 +153,4 @@
     position: relative;
     z-index: 2;
 }
+
