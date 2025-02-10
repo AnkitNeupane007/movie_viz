@@ -17,7 +17,7 @@ def login_user():
         
         if stored_hashed_password is None:
             flash('No user with that email', category='error')
-            return redirect(url_for(auth.login_user))
+            return redirect(url_for('auth.login_user'))
         
         if check_password_hash(stored_hashed_password, password):
             
