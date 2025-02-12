@@ -48,6 +48,12 @@ def signup_user():
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
         
+        admin_count = check_admin()
+        
+        if admin_count >= 1 and role == 'admin':
+            flash('Admin already exists', category='error')
+            return redirect(url_for('auth.signup_user'))
+        
         if len(email) < 4:
             flash('Email must be greater than 4 characters', category='error')
         elif len(username) < 2:

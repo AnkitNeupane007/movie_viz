@@ -49,6 +49,55 @@ def create_user(role, email, username, hashed_password):
     
     conn.commit()
     conn.close()
+    
+def check_admin():
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    cursor.execute('SELECT COUNT(*) FROM users WHERE role = "admin"')
+    
+    result = cursor.fetchone()
+    conn.close()
+    
+    return result[0]
+
+def get_all_users():
+    
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    
+    cursor.execute('SELECT username, email, role FROM users WHERE role != "admin"')
+        
+    users = cursor.fetchall()
+
+    # get all the users in a dictionary format
+    users = [dict(user) for user in users]
+    
+    conn.close()
+    
+    return users
+
+def delete_user_from_database(email):
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    cursor.execute('DELETE FROM users WHERE email = ?', (email, ))
+    
+    conn.commit()
+    conn.close()
+    
+def update_user_in_database(email, new_username):
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    cursor.execute('UPDATE users SET  username = ? WHERE email = ?', (new_username, email))
+    
+    conn.commit()
+    conn.close()
             
 def update_review(reviewer_rating, movie):
     
