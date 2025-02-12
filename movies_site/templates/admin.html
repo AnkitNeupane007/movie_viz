@@ -1,0 +1,34 @@
+{% extends "base.html" %} {% block title %}Admin Dashboard{% endblock %} {% block
+    content %}
+
+<div class="container mx-auto mt-8">
+    <h1 class="text-3xl font-semibold text-gray-800">Admin Dashboard</h1>
+    <!-- Create a list of all the users-->
+    <div class="mt-8">
+        <h2 class="text-xl font-semibold text-gray-800">Users</h2>
+        <ul class="mt-4">
+            {% for user in users %}
+            <li class="flex justify-between items-center bg-white shadow p-4 rounded-lg mb-4">
+                <span>{{ user.username }}</span>
+                <span>{{ user.role }}</span>
+                <span>{{ user.email }}</span>
+
+                 <!-- Update Form -->
+
+                 <form action="{{ url_for('admin.update_user') }}" method="POST" class="inline-flex space-x-2">
+                    <input type="hidden" name="user_email" value="{{ user.email }}">
+                    <input type="text" name="new_username" placeholder="New Username" class="border rounded p-1" required>
+                    <button type="submit" class="text-blue-500 hover:text-blue-700">Update</button>
+                </form>
+                
+                <span>
+                    <a href="{{ url_for('admin.delete_user', user_email=user.email) }}"
+                        class="text-red-500 hover:text-red-700">Delete</a>
+                </span>
+            </li>
+            {% endfor %}
+        </ul>
+
+
+    {% endblock %}
+    
