@@ -1,11 +1,15 @@
 ''' __init__.py banayo bhane yo purai folder lai as a package treat garna milcha '''
 
 from flask import Flask
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'ezgg'
-    app.config['DATABASE'] = 'instance/movies.db'
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+    app.config['DATABASE'] = os.getenv('DATABASE_URL')
     # Kun route ma jaani register garna lai
     from .views import views
     from .auth import auth
