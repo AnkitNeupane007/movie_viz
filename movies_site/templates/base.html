@@ -71,6 +71,7 @@
 						class="text-lg font-semibold hover:text-gray-400 px-2">Login</a>
 					<a href="{{ url_for('auth.signup_user') }}" class="text-lg font-semibold hover:text-gray-400">Sign
 						Up</a>
+					<a href="{{ url_for('views.about') }}" class="text-lg font-semibold hover:text-gray-400">About</a>
 					{% endif %}
 				</div>
 			</div>
@@ -115,7 +116,7 @@
 					<form action="{{ url_for('views.search_movie') }}" method="POST" class="flex-grow relative">
 						<input type="text" id="movie" name="movie" placeholder="Search for a movie..."
 							class="w-full border border-gray-300 rounded-lg p-3 pl-10 focus:ring-2 focus:ring-blue-400 focus:outline-none transition-opacity duration-300"
-							style="opacity: 0.4;" onmouseover="this.style.opacity=1;"
+							style="opacity: 0.8;" onmouseover="this.style.opacity=1;"
 							onmouseout="this.style.opacity=0.8;" />
 						<svg xmlns="http://www.w3.org/2000/svg"
 							class="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-9 text-gray-700" fill="none"

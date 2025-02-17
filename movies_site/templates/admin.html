@@ -1,34 +1,41 @@
-{% extends "base.html" %} {% block title %}Admin Dashboard{% endblock %} {% block
-    content %}
+{% extends "base.html" %} 
+{% block title %}Admin Dashboard{% endblock %} 
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %} 
+{% block content %}
 
-<div class="container mx-auto mt-8">
-    <h1 class="text-3xl font-semibold text-gray-800">Admin Dashboard</h1>
-    <!-- Create a list of all the users-->
-    <div class="mt-8">
-        <h2 class="text-xl font-semibold text-gray-800">Users</h2>
-        <ul class="mt-4">
+<div class="container mx-auto mt-8 px-4">
+    <h1 class="text-5xl font-bold text-white mb-8">Admin Dashboard</h1>
+    
+    <!-- User List Section -->
+    <div class="bg-white shadow-lg rounded-lg p-6">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6">Users</h2>
+        <ul class="space-y-4">
             {% for user in users %}
-            <li class="flex justify-between items-center bg-white shadow p-4 rounded-lg mb-4">
-                <span>{{ user.username }}</span>
-                <span>{{ user.role }}</span>
-                <span>{{ user.email }}</span>
+            <li class="flex flex-col md:flex-row justify-between items-center bg-gray-50 p-4 rounded-lg transition-all duration-300 hover:shadow-md">
+                <div class="flex-1 mb-4 md:mb-0">
+                    <span class="block text-gray-700 font-medium">{{ user.username }}</span>
+                    <span class="block text-sm text-gray-500">{{ user.role }}</span>
+                    <span class="block text-sm text-gray-500">{{ user.email }}</span>
+                </div>
 
-                 <!-- Update Form -->
-
-                 <form action="{{ url_for('admin.update_user') }}" method="POST" class="inline-flex space-x-2">
+                <!-- Update Form -->
+                <form action="{{ url_for('admin.update_user') }}" method="POST" class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
                     <input type="hidden" name="user_email" value="{{ user.email }}">
-                    <input type="text" name="new_username" placeholder="New Username" class="border rounded p-1" required>
-                    <button type="submit" class="text-blue-500 hover:text-blue-700">Update</button>
+                    <input type="text" name="new_username" placeholder="New Username" class="border rounded p-2 text-sm w-full md:w-auto" required>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300">Update</button>
                 </form>
-                
-                <span>
-                    <a href="{{ url_for('admin.delete_user', user_email=user.email) }}"
-                        class="text-red-500 hover:text-red-700">Delete</a>
-                </span>
+
+                <!-- Delete Button -->
+                <a href="{{ url_for('admin.delete_user', user_email=user.email) }}"
+                    class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors duration-300 mt-4 md:mt-0 md:ml-2">
+                    Delete
+                </a>
             </li>
             {% endfor %}
         </ul>
+    </div>
+</div>
 
-
-    {% endblock %}
-    
+{% endblock %}

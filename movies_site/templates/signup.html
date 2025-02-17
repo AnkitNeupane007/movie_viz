@@ -83,17 +83,14 @@ content %}
 					Sign Up
 				</button>
 			</div>
-			<div class="flex pt-6 justify-center">
-				<p>
-					Already have an account?
-					<br />
-					<a
-						href="{{ url_for('auth.login_user') }}"
-						class="font-semibold text-green-800 hover:text-green-400 underline pl-14"
-					>
-						Log In
-					</a>
-				</p>
+			<div class="bg-white p-4 mt-8 rounded-lg shadow-md opacity-70">
+				<div class="flex pt-6 justify-center">
+					<p>
+						Already have an account?
+						<br />
+						<a href="{{ url_for('auth.login_user') }}" class="font-semibold text-green-800 hover:text-green-400 underline pl-14">Log In</a>
+					</p>
+				</div>
 			</div>
 		</form>
 	</div>
