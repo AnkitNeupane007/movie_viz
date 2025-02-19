@@ -26,7 +26,7 @@ async function fetchSuggestions() {
             suggestions.forEach(movie => {
                 let listItem = document.createElement('li');
                 listItem.textContent = movie;
-                listItem.classList.add('p-2', 'hover:bg-gray-200', 'cursor-pointer');
+                listItem.classList.add('p-2', 'hover:bg-gray-200', 'cursor-pointer', 'hover:text-black');
                 listItem.onclick = () => {
                     document.getElementById('movie').value = movie;
                     suggestionsBox.classList.add('hidden');

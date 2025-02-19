@@ -1,5 +1,7 @@
-{% extends "base.html" %} {% block title %}Update Review{% endblock %} {% block
-content %}
+{% extends "base.html" %} 
+{% block title %}Update Review{% endblock %} 
+{% block content %}
+
 <div class="container mx-auto mt-8 p-4">
 	<h1 class="text-4xl font-bold text-center text-white mb-4">
 		Search Movies to Update
@@ -8,7 +10,7 @@ content %}
 		<form
 			action="{{ url_for('reviewer.update_movie') }}"
 			method="POST"
-			class="relative w-full max-w-md"
+			class="relative w-full max-w-md bg-black opacity-75 shadow-xl rounded-lg p-8 hover:opacity-90 transition"
 		>
 			<!-- Movie Search Input -->
 			<input
@@ -16,17 +18,14 @@ content %}
 				id="movie"
 				name="movie"
 				placeholder="Movie Name..."
-				class="w-full border border-gray-300 rounded-lg p-3 pl-10 focus:ring-2 focus:ring-blue-400 focus:outline-none mb-4 placeholder-black"
-				style="opacity: 0.7"
-				onmouseover="this.style.opacity=1;"
-				onmouseout="this.style.opacity=0.7;"
+				class="w-full border border-gray-400 rounded-lg p-3 pl-10 focus:ring-2 focus:ring-blue-400 focus:outline-none mb-4 text-white bg-black placeholder-gray-500 hover:bg-gray-700 transition"
 				oninput="fetchSuggestions()"
 				autocomplete="off"
 			/>
 
 			<ul
 				id="suggestions"
-				class="absolute bg-white border border-gray-300 rounded-md mt-1 w-full hidden z-10"
+				class="absolute bg-black border border-gray-400 text-white rounded-md mt-1 w-full hidden z-10"
 			></ul>
 
 			<!-- Rating Dropdown -->
@@ -39,10 +38,7 @@ content %}
 			<select
 				id="rating"
 				name="rating"
-				class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none mb-4"
-				style="opacity: 0.7"
-				onmouseover="this.style.opacity=1;"
-				onmouseout="this.style.opacity=0.7;"
+				class="w-full border border-gray-400 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none mb-4 text-white bg-black hover:bg-gray-700 transition"
 				required
 			>
 				<option value="" disabled selected>Choose a rating</option>
@@ -54,11 +50,25 @@ content %}
 			<!-- Submit Button -->
 			<button
 				type="submit"
-				class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700"
+				class="w-full bg-gray-800 border border-white text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
 			>
 				Update Review
 			</button>
 		</form>
 	</div>
 </div>
+
+<style>
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        -webkit-text-fill-color: white !important;
+        caret-color: white !important;
+        background-color: black !important;
+        border: 1px solid gray !important;
+        transition: background-color 5000s ease-in-out 0s !important;
+    }
+</style>
+
 {% endblock %}
