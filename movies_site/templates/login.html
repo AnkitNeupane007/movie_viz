@@ -2,7 +2,7 @@
 {% block title %}Login{% endblock %}
 {% block content %}
 
-<div class="justify-center bg-black opacity-75 shadow-xl rounded-lg p-8 max-w-md w-1/2 mx-auto hover:opacity-90 transition-opacity duration-300 ease-in-out hover:shadow-2xl hover:shadow-gray-500 hover:scale-105 transition-transform duration-500 ease-in-out">
+<div class="justify-center bg-black opacity-75 shadow-xl rounded-lg p-8 max-w-md w-1/2 mx-auto hover:opacity-90 transition-opacity duration-300 ease-in-out hover:shadow-2xl hover:shadow-gray-500">
     <h1 class="text-3xl font-bold text-center mb-8 text-white">Login</h1>
     <form
         action="{{ url_for('auth.login_user') }}"
@@ -68,16 +68,45 @@
 </div>
 
 <style>
-    input:-webkit-autofill,
-    input:-webkit-autofill:hover,
-    input:-webkit-autofill:focus,
-    input:-webkit-autofill:active {
-        -webkit-text-fill-color: white !important;
-        caret-color: white !important;
-        background-color: black !important;
-        border: 1px solid gray !important;
-        transition: background-color 5000s ease-in-out 0s !important;
-    }
+	input:-webkit-autofill,
+	input:-webkit-autofill:hover,
+	input:-webkit-autofill:focus,
+	input:-webkit-autofill:active {
+		-webkit-text-fill-color: white !important;
+		caret-color: white !important;
+		background-color: black !important;
+		border: 1px solid gray !important;
+		box-shadow: none !important; /* Remove any shadow during autofill */
+		background-clip: padding-box !important; /* Prevent background from blending */
+		transition: background-color 5000s ease-in-out 0s !important;
+	}
+	
+	input {
+		background-color: black !important;
+		color: white !important;
+		border: 1px solid gray !important;
+		font-family: Arial, sans-serif; /* Ensure a clear font is used */
+		font-size: 1rem; /* Define a specific font size */
+		transition: background-color 0.3s ease, border 0.3s ease;
+		padding-left: 10px; /* Add some left padding to avoid text touching the border */
+	}
+	
+	input:focus,
+	input:hover {
+		background-color: #333333 !important;
+		border: 1px solid #888888 !important;
+		box-shadow: none !important; /* Remove any shadow effect when focused */
+	}
+	
+	input::placeholder {
+		color: #888888;
+	}
+	
+	input:focus {
+		outline: none !important; /* Remove default outline when focused */
+	}
+	
+
 </style>
 
 {% endblock %}
