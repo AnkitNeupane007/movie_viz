@@ -7,36 +7,41 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mx-auto mt-8 px-4">
-    <h1 class="text-5xl font-bold text-white mb-8">Admin Dashboard</h1>
+<div class="flex items-center justify-center p-12 w-full mx-auto z-10">
+    <div class="w-full max-w-7xl bg-gray-900 shadow-xl rounded-lg p-8">
+        <h1 class="text-5xl font-extrabold text-white mb-12 text-center">Admin Dashboard</h1>
 
-    <!-- User List Section -->
-    <div class="bg-white shadow-lg rounded-lg p-6">
-        <h2 class="text-3xl font-bold text-gray-900 mb-6">Users</h2>
-        <ul class="space-y-4">
-            {% for user in users %}
-            <li class="flex flex-col md:flex-row justify-between items-center bg-gray-50 p-4 rounded-lg transition-all duration-300 hover:shadow-md">
-                <div class="flex-1 mb-4 md:mb-0">
-                    <span class="block text-gray-700 font-medium">{{ user.username }}</span>
-                    <span class="block text-sm text-gray-500">{{ user.role }}</span>
-                    <span class="block text-sm text-gray-500">{{ user.email }}</span>
-                </div>
+        <!-- User List Section -->
+        <div class="mb-8">
+            <h2 class="text-4xl font-bold text-white mb-8 text-center">User Management</h2>
+            <ul class="space-y-6">
+                {% for user in users %}
+                <li class="flex flex-col md:flex-row justify-between items-center bg-gray-800 p-8 rounded-lg transition-all duration-300 hover:shadow-xl hover:bg-gray-700">
+                    <div id="gg" class="flex-1 mb-6 md:mb-0">
+                        <span class="block text-lg font-semibold text-gray-300">{{ user.username }}</span>
+                        <span class="block text-sm text-gray-500">{{ user.role }}</span>
+                        <span class="block text-sm text-gray-400">{{ user.email }}</span>
+                    </div>
 
-                <!-- Update Form -->
-                <form action="{{ url_for('admin.update_user') }}" method="POST" class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
-                    <input type="hidden" name="user_email" value="{{ user.email }}">
-                    <input type="text" name="new_username" placeholder="New Username" class="border rounded p-2 text-sm w-full md:w-auto" required>
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300">Update</button>
-                </form>
+                    <!-- Flexbox container to align form and delete button -->
+                    <div class="flex items-center space-x-4">
+                        <!-- Update Form -->
+                        <form action="{{ url_for('admin.update_user') }}" method="POST" class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 w-full">
+                            <input type="hidden" name="user_email" value="{{ user.email }}">
+                            <input type="text" name="new_username" placeholder="New Username" class="border border-gray-600 rounded-lg p-4 text-sm text-gray-900 w-full md:w-80 focus:ring-2 focus:ring-blue-500" required>
+                            <button type="submit" class="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors duration-300 focus:ring-2 focus:ring-blue-500 focus:outline-none w-full md:w-auto mt-4 md:mt-0">Update</button>
+                        </form>
 
-                <!-- Delete Button -->
-                <a href="{{ url_for('admin.delete_user', user_email=user.email) }}"
-                    class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors duration-300 mt-4 md:mt-0 md:ml-2">
-                    Delete
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
+                        <!-- Delete Button -->
+                        <a href="{{ url_for('admin.delete_user', user_email=user.email) }}"
+                            class="bg-red-600 text-white px-8 py-4 rounded-lg hover:bg-red-700 transition-colors duration-300 mt-4 md:mt-0 focus:ring-2 focus:ring-red-500 focus:outline-none w-full md:w-auto">
+                            Delete
+                        </a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -15,12 +15,12 @@ def login_user():
         stored_hashed_password = get_password(email)
         user_role = get_role(email)
         
-        if role != user_role:
-            flash('You are of a different role', category='error')
-            return redirect(url_for('auth.login_user'))
-        
         if stored_hashed_password is None:
             flash('No user with that email', category='error')
+            return redirect(url_for('auth.login_user'))
+        
+        if role != user_role:
+            flash('You are of a different role', category='error')
             return redirect(url_for('auth.login_user'))
         
         if check_password_hash(stored_hashed_password, password):
