@@ -113,10 +113,19 @@
 				<div class="relative w-full max-w-md flex items-center">
 					<!-- Search Bar -->
 					<form action="{{ url_for('views.search_movie') }}" method="POST" class="flex-grow relative">
-						<input type="text" id="movie" name="movie" placeholder="Search for a movie..."
-							class="w-full border border-gray-300 rounded-lg p-3 pl-10 focus:ring-2 focus:ring-blue-400 focus:outline-none transition-opacity duration-300"
-							style="opacity: 0.8;" onmouseover="this.style.opacity=1;"
-							onmouseout="this.style.opacity=0.8;" />
+						<input type="text"
+								id="movie"
+								name="movie"
+								placeholder="Search for a movie..."
+								class="placeholder-black w-full border border-gray-300 rounded-lg p-3 pl-10 focus:ring-2 focus:ring-blue-400 focus:outline-none transition-opacity duration-300"
+								style="opacity: 0.7;"
+								onmouseover="this.style.opacity=1;"
+								onmouseout="this.style.opacity=0.7;"
+								oninput="fetchSuggestions()"
+								autocomplete="off" />
+
+						<ul id="suggestions" class="absolute bg-white border border-gray-300 rounded-md mt-1 w-full hidden"></ul>
+
 						<svg xmlns="http://www.w3.org/2000/svg"
 							class="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-9 text-gray-700" fill="none"
 							viewBox="0 0 24 24" stroke="currentColor">
@@ -172,7 +181,7 @@
 	{% block scripts %}
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}" />
-	<script src="{{ url_for('static', filename='js/popup.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/base.js') }}"></script>
 	{% endblock %}
 </body>
 

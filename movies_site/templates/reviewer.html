@@ -1,7 +1,9 @@
 {% extends "base.html" %} {% block title %}Update Review{% endblock %} {% block
 content %}
 <div class="container mx-auto mt-8 p-4">
-	<h1 class="text-4xl font-bold text-center text-white mb-4">Search Movies to Update</h1>
+	<h1 class="text-4xl font-bold text-center text-white mb-4">
+		Search Movies to Update
+	</h1>
 	<div class="flex justify-center mb-8">
 		<form
 			action="{{ url_for('reviewer.update_movie') }}"
@@ -14,27 +16,36 @@ content %}
 				id="movie"
 				name="movie"
 				placeholder="Movie Name..."
-				class="w-full border border-gray-300 rounded-lg p-3 pl-10 focus:ring-2 focus:ring-blue-400 focus:outline-none mb-4"
-				style="opacity: 0.4;"
-				onmouseover="this.style.opacity=1;" 
-				onmouseout="this.style.opacity=0.5;"
+				class="w-full border border-gray-300 rounded-lg p-3 pl-10 focus:ring-2 focus:ring-blue-400 focus:outline-none mb-4 placeholder-black"
+				style="opacity: 0.7"
+				onmouseover="this.style.opacity=1;"
+				onmouseout="this.style.opacity=0.7;"
+				oninput="fetchSuggestions()"
+				autocomplete="off"
 			/>
 
+			<ul
+				id="suggestions"
+				class="absolute bg-white border border-gray-300 rounded-md mt-1 w-full hidden z-10"
+			></ul>
+
 			<!-- Rating Dropdown -->
-			<label for="rating" class="block font-medium text-white text-2xl font-bold mb-1">			
+			<label
+				for="rating"
+				class="block font-medium text-white text-2xl font-bold mb-1"
+			>
 				Select Rating:
 			</label>
 			<select
 				id="rating"
 				name="rating"
 				class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none mb-4"
-				style="opacity: 0.4;"
-				onmouseover="this.style.opacity=1;" 
-				onmouseout="this.style.opacity=0.4;"
+				style="opacity: 0.7"
+				onmouseover="this.style.opacity=1;"
+				onmouseout="this.style.opacity=0.7;"
 				required
 			>
-				<option value="" disabled selected
-				>Choose a rating</option>
+				<option value="" disabled selected>Choose a rating</option>
 				{% for i in range(11) %}
 				<option value="{{ i }}">{{ i }}</option>
 				{% endfor %}

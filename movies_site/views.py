@@ -30,6 +30,18 @@ def search_movie():
     
     return redirect(url_for('views.home'))
 
+@views.route('/api/suggestions', methods=['GET', 'POST'])
+def search_suggestions():
+    
+    prompt = request.args.get('query', '').strip().lower()
+    if not prompt:
+        return jsonify([])
+    
+    print(prompt)
+    
+    movies_list = search_movies(prompt)
+    return jsonify(movies_list)
+
 @views.route('/random', methods=['GET', 'POST'])
 def random_movie():
     

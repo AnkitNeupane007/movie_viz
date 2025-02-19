@@ -125,6 +125,20 @@ def check_movie(movie):
     
     return movie_id
 
+def search_movies(movie):
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    cursor.execute('SELECT title FROM movies WHERE title LIKE ? ORDER BY title ASC LIMIT 8', (f'{movie}%', ))
+    
+    movies = cursor.fetchall()
+    
+    if not movies:
+        cursor.execute('SELECT title FROM movies WHERE title LIKE ? LIMIT 8', (f'%{movie}%', ))
+        movies = cursor.fetchall()
+    
+    return movies
+
 def display_movie(movie_id):
     conn = get_db()
     cursor = conn.cursor()
