@@ -1,98 +1,60 @@
-{% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
-content %}
-
-<div class="flex justify-center min-h-screen bg-gray-100 mx-auto px-8 py-4 w-[90%] rounded-lg h-auto md:h-[80vh] lg:h-[70vh]">	<div class="bg-white shadow-md rounded-lg p-8 max-w-md w-full">
-		<h1 class="text-2xl font-bold text-center mb-6">Sign Up</h1>
-		<form
-			action="{{ url_for('auth.signup_user') }}"
-			method="POST"
-			class="space-y-4"
-		>
-			<div>
-				<label for="role" class="block text-gray-700 font-medium mb-2"
-					>Role</label
-				>
-				<select
-					id="role"
-					name="role"
-					required
-					class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-				>
-					<option value="reviewer">Reviewer</option>
-					<option value="admin">Admin</option>
-				</select>
-			</div>
-			<div>
-				<label for="name" class="block text-gray-700 font-medium mb-2"
-					>Username</label
-				>
-				<input
-					type="text"
-					id="username"
-					name="username"
-					required
-					class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-					placeholder="Enter username"
-				/>
-			</div>
-			<div>
-				<label for="email" class="block text-gray-700 font-medium mb-2"
-					>Email</label
-				>
-				<input
-					type="email"
-					id="email"
-					name="email"
-					required
-					class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-					placeholder="Enter email"
-				/>
-			</div>
-			<div>
-				<label for="password1" class="block text-gray-700 font-medium mb-2"
-					>Password</label
-				>
-				<input
-					type="password"
-					id="password1"
-					name="password1"
-					required
-					class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-					placeholder="Enter password"
-				/>
-			</div>
-			<div>
-				<label for="password2" class="block text-gray-700 font-medium mb-2"
-					>Confirm Password</label
-				>
-				<input
-					type="password"
-					id="password2"
-					name="password2"
-					required
-					class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-					placeholder="Confirm password"
-				/>
-			</div>
-			<br />
-			<div>
-				<button
-					type="submit"
-					class="w-full bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition"
-				>
-					Sign Up
-				</button>
-			</div>
-			<div class="bg-white p-4 mt-8 rounded-lg shadow-md opacity-70">
-				<div class="flex pt-6 justify-center">
-					<p>
-						Already have an account?
-						<br />
-						<a href="{{ url_for('auth.login_user') }}" class="font-semibold text-green-800 hover:text-green-400 underline pl-14">Log In</a>
-					</p>
-				</div>
-			</div>
-		</form>
-	</div>
+{% extends "base.html" %}
+{% block title %}Sign Up{% endblock %}
+{% block content %}
+<div class="justify-center bg-black opacity-75 shadow-xl rounded-lg p-8 max-w-md w-1/2 mx-auto hover:opacity-90 transition-opacity duration-500 ease-in-out hover:shadow-2xl hover:shadow-gray-500 hover:scale-105 transition-transform duration-500 ease-in-out">
+    <h1 class="text-3xl font-bold text-center mb-8 text-white">Sign Up</h1>
+    <form action="{{ url_for('auth.signup_user') }}" method="POST" class="space-y-6">
+        <div>
+            <label for="role" class="block text-white font-medium mb-2">Role</label>
+            <select id="role" name="role" required class="w-full border border-gray-400 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none text-white bg-black placeholder-gray-500 hover:bg-gray-700 transition">
+                <option value="reviewer">Reviewer</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+        <div>
+            <label for="username" class="block text-white font-medium mb-2">Username</label>
+            <input type="text" id="username" name="username" required class="w-full border border-gray-400 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none text-white bg-black placeholder-gray-500 hover:bg-gray-700 transition" placeholder="Enter username" />
+        </div>
+        <div>
+            <label for="email" class="block text-white font-medium mb-2">Email</label>
+            <input type="email" id="email" name="email" required class="w-full border border-gray-400 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none text-white bg-black placeholder-gray-500 hover:bg-gray-700 transition" placeholder="Enter email" />
+        </div>
+        <div>
+            <label for="password1" class="block text-white font-medium mb-2">Password</label>
+            <input type="password" id="password1" name="password1" required class="w-full border border-gray-400 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none text-white bg-black placeholder-gray-500 hover:bg-gray-700 transition" placeholder="Enter password" />
+        </div>
+        <div>
+            <label for="password2" class="block text-white font-medium mb-2">Confirm Password</label>
+            <input type="password" id="password2" name="password2" required class="w-full border border-gray-400 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none text-white bg-black placeholder-gray-500 hover:bg-gray-700 transition" placeholder="Confirm password" />
+        </div>
+        <br />
+        <div>
+            <button type="submit" class="w-full bg-gray-800 border border-white text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition">
+                Sign Up
+            </button>
+        </div>
+        <div class="flex pt-6 justify-center">
+            <p class="text-white">
+                Already have an account?
+                <br />
+                <a href="{{ url_for('auth.login_user') }}" class="font-bold text-white hover:text-gray-300 underline pl-14">
+                    Log In
+                </a>
+            </p>
+        </div>
+    </form>
 </div>
+
+<style>
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        -webkit-text-fill-color: white !important; /* Keeps text white */
+        caret-color: white !important; /* Keeps cursor visible */
+        background-color: black !important; /* Ensures background remains black */
+        border: 1px solid gray !important; /* Keeps border */
+        transition: background-color 5000s ease-in-out 0s !important; /* Prevents autofill from resetting styles */
+    }
+</style>
 {% endblock %}
