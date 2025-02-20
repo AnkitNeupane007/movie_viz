@@ -17,7 +17,8 @@
 		<div class="container mx-auto flex justify-between items-center p-4">
 			<div class="flex items-center space-x-4">
 				<a href="{{ url_for('views.home') }}" class="text-lg font-semibold hover:text-gray-400">Home</a>
-		
+				<a href="{{ url_for('views.visualize') }}" class="text-lg font-semibold hover:text-gray-400">Visualizer</a>
+
 				{% if session.get('user_id') %}
 				<!-- Show Reviewer Dashboard link if logged in as a reviewer -->
 				{% if session.get('role') == 'reviewer' %}
@@ -106,7 +107,7 @@
     {% endwith %}
 
     <!-- Main Content -->
-    <div class="flex mx-auto mt-8 p-1">
+    <div class="flex mx-auto mt-10 p-1">
         {% block content %}
         <main class="container mx-auto mt-8 p-2">
             <h1 class="text-5xl text-white font-bold text-center mr-10 mb-4">Search Movies</h1>
@@ -146,15 +147,15 @@
                     <p><strong>Title:</strong> {{ information.title }}</p>
                     <p><strong>Tagline:</strong> {{ information.tagline }}</p>
                     <p><strong>Genre:</strong> {{ information.genres }}</p>
-                    <p><strong>Cast:</strong> {{ information.cast }}</p>
-                    <p><strong>Director:</strong> {{ information.directors }}</p>
+                    <p><strong>Cast:</strong> {{ information.actors }}</p>
+                    <p><strong>Director:</strong> {{ information.director }}</p>
                     <p><strong>Release Date:</strong> {{ information.release_date }}</p>
                     <p><strong>Runtime:</strong> {{ information.runtime }} minutes</p>
                     <p><strong>Overview:</strong> {{ information.overview }}</p>
                     <p><strong>Budget:</strong> ${{ "%.2f" | format(information.budget/1000000) }}M</p>
                     <p><strong>Revenue:</strong> ${{ "%.2f" | format(information.revenue/1000000) }}M</p>
                     <p><strong>Original Language:</strong> {{ information.original_language }}</p>
-                    <p><strong>Production Companies:</strong> {{ information.production_companies }}</p>
+                    <p><strong>Production Company:</strong> {{ information.production_company }}</p>
                     <p><strong>Rating: </strong>{{ information.rating }}⭐</p>
                 </div>
             </div>

@@ -139,6 +139,34 @@ def search_movies(movie):
     
     return movies
 
+def search_actors(actor):
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    cursor.execute('SELECT name FROM actors WHERE name LIKE ? ORDER BY name ASC LIMIT 8', (f'{actor}%', ))
+    
+    actors = cursor.fetchall()
+    
+    if not actors:
+        cursor.execute('SELECT name FROM actors WHERE name LIKE ? LIMIT 8', (f'%{actor}%', ))
+        actors = cursor.fetchall()
+        
+    return actors
+
+def search_directors(director):
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    cursor.execute('SELECT name FROM directors WHERE name LIKE ? ORDER BY name ASC LIMIT 8', (f'{director}%', ))
+    
+    directors = cursor.fetchall()
+    
+    if not directors:
+        cursor.execute('SELECT name FROM directors WHERE name LIKE ? LIMIT 8', (f'%{director}%', ))
+        directors = cursor.fetchall()
+        
+    return directors
+
 def display_movie(movie_id):
     conn = get_db()
     cursor = conn.cursor()
