@@ -21,7 +21,7 @@ def search_movie():
         
         if check_movie(movie):
             movie_id = check_movie(movie)[0]
-            movie_information = display_movie(movie_id)[0]
+            movie_information = display_movie(movie_id)
             
             return render_template('base.html', information=movie_information)
         else:
@@ -48,7 +48,9 @@ def random_movie():
     if request.method == 'POST':
         movie_id = random.randint(1, 2951)
         
-        movie_information = display_movie(movie_id)[0]
+        movie_information = display_movie(movie_id)
+        
+        print(movie_information)
             
         return render_template('base.html', information=movie_information)
         

@@ -180,6 +180,12 @@ def display_movie(movie_id):
         m.id, m.title, m.release_date, m.runtime, m.tagline, m.overview, m.budget, m.revenue, m.original_language, d.name, p.name, r.rating;
     ''', (movie_id, ))
     
-    movie_information = cursor.fetchall()
+    # Fetch results
+    movie_information = cursor.fetchone()
+
+    # Convert to dictionary
+    if movie_information:
+        columns = [desc[0] for desc in cursor.description]
+        movie_information = dict(zip(columns, movie_information))
     
     return movie_information

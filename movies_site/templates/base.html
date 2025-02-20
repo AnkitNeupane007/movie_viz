@@ -119,7 +119,7 @@
                             style="opacity: 0.7;" onmouseover="this.style.opacity=1;" onmouseout="this.style.opacity=0.7;"
                             oninput="fetchSuggestions()" autocomplete="off" />
 
-							<ul id="suggestions" class="absolute bg-gray-900 text-white border border-gray-700 rounded-md mt-1 w-full hidden">
+							<ul id="suggestions" class="z-10 absolute bg-gray-900 text-white border border-gray-700 rounded-md mt-1 w-full hidden">
 							</ul>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-9 text-white"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -143,19 +143,19 @@
             {% if information %}
             <div class="card justify-center mx-auto mt-12">
                 <div class="content">
-                    <p><strong>Title:</strong> {{ information[0] }}</p>
-                    <p><strong>Tagline:</strong> {{ information[3] }}</p>
-                    <p><strong>Genre:</strong> {{ information[11] }}</p>
-                    <p><strong>Cast:</strong> {{ information[12] }}</p>
-                    <p><strong>Director:</strong> {{ information[8] }}</p>
-                    <p><strong>Release Date:</strong> {{ information[1] }}</p>
-                    <p><strong>Runtime:</strong> {{ information[2] }} minutes</p>
-                    <p><strong>Overview:</strong> {{ information[4] }}</p>
-                    <p><strong>Budget:</strong> ${{ "%.2f" | format(information[5]/1000000) }}M</p>
-                    <p><strong>Revenue:</strong> ${{ "%.2f" | format(information[6]/1000000) }}M</p>
-                    <p><strong>Original Language:</strong> {{ information[7] }}</p>
-                    <p><strong>Production Companies:</strong> {{ information[9] }}</p>
-                    <p><strong>Rating: </strong>{{ information[10] }}⭐</p>
+                    <p><strong>Title:</strong> {{ information.title }}</p>
+                    <p><strong>Tagline:</strong> {{ information.tagline }}</p>
+                    <p><strong>Genre:</strong> {{ information.genres }}</p>
+                    <p><strong>Cast:</strong> {{ information.cast }}</p>
+                    <p><strong>Director:</strong> {{ information.directors }}</p>
+                    <p><strong>Release Date:</strong> {{ information.release_date }}</p>
+                    <p><strong>Runtime:</strong> {{ information.runtime }} minutes</p>
+                    <p><strong>Overview:</strong> {{ information.overview }}</p>
+                    <p><strong>Budget:</strong> ${{ "%.2f" | format(information.budget/1000000) }}M</p>
+                    <p><strong>Revenue:</strong> ${{ "%.2f" | format(information.revenue/1000000) }}M</p>
+                    <p><strong>Original Language:</strong> {{ information.original_language }}</p>
+                    <p><strong>Production Companies:</strong> {{ information.production_companies }}</p>
+                    <p><strong>Rating: </strong>{{ information.rating }}⭐</p>
                 </div>
             </div>
             {% endif %}
