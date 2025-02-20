@@ -1,73 +1,43 @@
-{% extends "base.html" %} {% block title %}About Page{% endblock %} {% block
-	content %}
-	<section id="about" class="container mx-auto p-2 bg-white shadow-md rounded-lg">
-	<h1 class = "text-4xl font-bold text-center justify-center">Meet Our Contributors</h1>
-		<div class="card-container flex flex-wrap justify-center p-6">
-			<div class="card-item pt-4">
-				<div class="flip-card">
-					<div class="flip-card-inner">
-						<div class="flip-card-front">
-							<img
-								class="rounded-full h-40 w-40 mx-auto mb-20"
-								src="{{ url_for('static', filename='images/aaditya.png') }}"
-								alt="Aaditya Joshi"
-							/>
-							<p class="title mb-10">Aaditya Joshi</p>
-						</div>
-						<div class="flip-card-back">
-							<p class="title">BACK</p>
-							<p>Leave Me</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="card-item mx-24 pt-4">
-				<div class="flip-card">
-					<div class="flip-card-inner">
-						<div class="flip-card-front">
-							<img
-								class="rounded-full h-40 w-40 mx-auto mb-20"
-								src="{{ url_for('static', filename='images/abhijeet.png') }}"
-								alt="Abhijeet KC"
-							/>
-							<p class="title mb-10">Abhijeet KC</p>
-						</div>
-						<div class="flip-card-back">
-							<p class="title">BACK</p>
-							<p>Leave Me</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="card-item pt-4">
-				<div class="flip-card">
-					<div class="flip-card-inner">
-						<div class="flip-card-front">
-							<img
-								class="rounded-full h-40 w-40 mx-auto mb-20"
-								src="{{ url_for('static', filename='images/ankit.png') }}"
-								alt="Ankit Neupane"
-							/>
-							<p class="title mb-10">Ankit Neupane</p>
-						</div>
-						<div class="flip-card-back">
-							<p class="title">BACK</p>
-							<p>Leave Me</p>
-						</div>
-					</div>
-				</div>
-			</div>
+{% extends "base.html" %}
+
+{% block title %}Custom Page Title{% endblock %}
+
+{% block styles %}
+<link
+	rel="stylesheet"
+	href="{{ url_for('static', filename='css/about.css') }}"
+/>
+<link
+	rel="stylesheet"
+	href="{{ url_for('static', filename='css/popup.css') }}"
+/>
+{% endblock %}
+
+{% block content %}
+<div class="about-container">
+	<h1 class="about-title">Meet Our Team</h1>
+	<div class="team-section">
+		<div class="team-card">
+			<img src="{{ url_for('static', filename='./images/ankit.png') }}" alt="Ankit Neupane">
+			<h3>John Doe</h3>
+			<p>Lead Developer</p>
+			<p>John is the mastermind behind the architecture of our movie database.</p>
 		</div>
-	</section>
-	{% endblock %} {% block scripts %}
-	<script src="{{ url_for('static', filename='js/popup.js') }}"></script>
-	{% endblock %} {% block styles %}
-	<link
-		rel="stylesheet"
-		href="{{ url_for('static', filename='css/about.css') }}"
-	/>
-	<link
-		rel="stylesheet"
-		href="{{ url_for('static', filename='css/popup.css') }}"
-	/>
-	{% endblock %}
+		<div class="team-card">
+			<img src="{{ url_for('static', filename='images/abhijeet.png') }}" alt="Abhijeet K.C">
+			<h3>Jane Smith</h3>
+			<p>UI/UX Designer</p>
+			<p>Jane designed the stunning visuals and smooth user experience of our site.</p>
+		</div>
+		<div class="team-card">
+			<img src="{{ url_for('static', filename='images/aaditya.png') }}" alt="Person 3">
+			<h3>Mike Johnson</h3>
+			<p>Backend Engineer</p>
+			<p>Mike handled database optimization and API integrations for seamless performance.</p>
+		</div>
+	</div>
+</div>{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/base.js') }}"></script>
+{% endblock %}
