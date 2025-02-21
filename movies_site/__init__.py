@@ -10,6 +10,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
     app.config['DATABASE'] = os.getenv('DATABASE_URL')
+    app.config['DEBUG'] = False
     # Kun route ma jaani register garna lai
     from .views import views
     from .auth import auth
