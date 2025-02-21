@@ -212,3 +212,28 @@ def compare_movies():
             return redirect(url_for('views.visualize'))
 
     return redirect(url_for('views.visualize'))
+
+@views.route('/api/top_grossing_movies', methods=['GET'])
+def top_grossing_movies():
+    movies = get_top_grossing_movies() # list of tuples (title, revenue)
+    
+    return jsonify(movies) if movies else jsonify([])
+
+@views.route('/api/top_rated_movies', methods=['GET'])
+def top_rated_movies():
+    movies = get_top_rated_movies() # list of tuples (title, rating)
+    
+    return jsonify(movies) if movies else jsonify([])
+
+@views.route('/api/top_movies_actors', methods=['GET'])
+def top_movies_actors():
+    actors = get_top_actors_most_movies() # list of tuples (director, no_of_movies)
+    
+    return jsonify(actors) if actors else jsonify([])
+
+@views.route('/api/top_movies_directors', methods=['GET'])
+def top_movies_directors():
+    directors = get_top_directors_most_movies() # list of tuples (director, no_of_movies)
+    
+    return jsonify(directors) if directors else jsonify([])
+    

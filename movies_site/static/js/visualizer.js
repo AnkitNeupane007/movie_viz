@@ -1,13 +1,28 @@
+// Utility function to handle clicks outside the suggestion box
+function handleClickOutsideSuggestions(suggestionBoxId) {
+    document.addEventListener('click', function(event) {
+        const suggestions = document.getElementById(suggestionBoxId);
+        const inputField = document.getElementById(suggestionBoxId.replace('Suggestions', ''));
+
+        // Hide the suggestion box if the click was outside the input or suggestions box
+        if (!suggestions.contains(event.target) && event.target !== inputField) {
+            suggestions.classList.add('hidden');
+        }
+    });
+}
+
 function fetchActorSuggestions() {
     const query = document.getElementById("searchActor").value.trim();
+    const suggestions = document.getElementById("actorSuggestions");
+
     if (query.length === 0) {
-        document.getElementById("actorSuggestions").classList.add("hidden");
+        suggestions.classList.add("hidden");
         return;
     }
+
     fetch(`/api/suggestions/actors?query=${query}`)
         .then(response => response.json())
         .then(data => {
-            const suggestions = document.getElementById("actorSuggestions");
             suggestions.innerHTML = "";
             if (data.length > 0) {
                 data.forEach(actor => {
@@ -25,7 +40,10 @@ function fetchActorSuggestions() {
                 suggestions.classList.add("hidden");
             }
         });
+
+    handleClickOutsideSuggestions('actorSuggestions');
 }
+
 
 function fetchDirectorSuggestions() {
     const query = document.getElementById("searchDirector").value.trim();
@@ -54,6 +72,9 @@ function fetchDirectorSuggestions() {
                 suggestions.classList.add("hidden");
             }
         });
+
+        handleClickOutsideSuggestions('directorSuggestions');
+
 }
 
 function fetchMovieSuggestions(inputId) {
@@ -87,6 +108,8 @@ function fetchMovieSuggestions(inputId) {
             }
         })
         .catch(error => console.error("Error fetching suggestions:", error));
+
+        handleClickOutsideSuggestions(`${inputId}Suggestions`);
 }
 
 // Function to render genre ratings chart
@@ -121,7 +144,7 @@ function fetchAndRenderGenreChart() {
                     onClick: (event, elements) => {
                         if (elements.length > 0) {
                             const genreClicked = genres[elements[0].index];
-                            console.log("Genre clicked: ", genreClicked);
+                            // console.log("Genre clicked: ", genreClicked);
                             fetchMoviesByGenre(genreClicked, 1);
                         }
                     },
@@ -141,7 +164,8 @@ function fetchAndRenderGenreChart() {
                                 color: "#2D3748",
                             },
                             grid: {
-                                display: false
+                                display: false,
+                                drawBorder: true,
                             },
                         },
                         x: {
@@ -157,6 +181,7 @@ function fetchAndRenderGenreChart() {
                             },
                             grid: {
                                 display: false,
+                                drawBorder: true,
                             },
                         }
                     },
@@ -186,7 +211,346 @@ function fetchAndRenderGenreChart() {
         .catch(error => console.error('Error fetching ratings data:', error));
 }
 
+// Function to fetch and render top grossing movies chart
+function fetchAndRenderTopGrossingMovies() {
+    const ctx = document.getElementById("topGrossingMoviesChart").getContext("2d");
 
+    fetch('/api/top_grossing_movies')
+        .then(response => response.json())
+        .then(movies => {
+            const movieTitles = movies.map(movie => movie[0]); // Extract movie titles
+            const movieRevenues = movies.map(movie => movie[1]); // Extract movie revenues
+
+            const topGrossingMoviesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: movieTitles,
+                    datasets: [{
+                        label: 'Revenue ($)',
+                        data: movieRevenues,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)', // Bar color
+                        borderColor: 'rgb(255, 255, 255)',
+                        borderWidth: 1,
+                        borderRadius: 8,
+                        hoverBackgroundColor: "rgba(56, 56, 56, 0.8)",
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Revenue ($)',
+                                font: { size: 16, weight: 'bold' },
+                                color: '#4A5568'
+                            },
+                            ticks: {
+                                font: { size: 14, weight: 'bold' },
+                                color: '#2D3748'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Movie Title',
+                                font: { size: 16, weight: 'bold' },
+                                color: '#4A5568'
+                            },
+                            ticks: {
+                                font: { size: 14, weight: 'bold' },
+                                color: '#2D3748'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: 'white',
+                            bodyColor: 'white',
+                            borderColor: 'rgba(255, 255, 255, 0.8)',
+                            borderWidth: 1,
+                            padding: 12,
+                            titleFont: { weight: 'bold', size: 16 },
+                            bodyFont: { size: 14 }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    onClick: function (event, elements) {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const movieName = movieTitles[index]; // Get the movie name
+                            window.open(`/search?movie=${encodeURIComponent(movieName)}`, '_blank');
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching top grossing movies data:', error));
+}
+
+// Function to fetch and render top rated movies chart
+function fetchAndRenderTopRatedMovies() {
+    const ctx = document.getElementById("topRatedMoviesChart").getContext("2d");
+
+    // Fetch top rated movies from the Flask API
+    fetch('/api/top_rated_movies')
+        .then(response => response.json())
+        .then(movies => {
+            const movieTitles = movies.map(movie => movie[0]); // Extract movie titles
+            const movieRatings = movies.map(movie => movie[1]); // Extract movie ratings
+
+            // Create the bar chart
+            const topRatedMoviesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: movieTitles,
+                    datasets: [{
+                        label: 'Rating',
+                        data: movieRatings,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)', // Blue bars
+                        borderColor: 'rgb(255, 255, 255)',
+                        borderWidth: 1,
+                        borderRadius: 8, // Rounded corners
+                        hoverBackgroundColor: "rgba(56, 56, 56, 0.8)"
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y', // Horizontal bar chart
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Rating',
+                                font: { size: 16, weight: 'bold' },
+                                color: '#4A5568'
+                            },
+                            ticks: {
+                                font: { size: 14, weight: 'bold' },
+                                color: '#2D3748'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Movie Title',
+                                font: { size: 16, weight: 'bold' },
+                                color: '#4A5568'
+                            },
+                            ticks: {
+                                font: { size: 14, weight: 'bold' },
+                                color: '#2D3748'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: 'white',
+                            bodyColor: 'white',
+                            borderColor: 'rgba(255, 255, 255, 0.8)',
+                            borderWidth: 1,
+                            padding: 12,
+                            titleFont: { weight: 'bold', size: 16 },
+                            bodyFont: { size: 14 }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    onClick: function (event, elements) {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const movieName = movieTitles[index]; // Get the movie name
+                            window.open(`/search?movie=${encodeURIComponent(movieName)}`, '_blank'); // Open in new tab
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching top rated movies data:', error));
+}
+
+// Fucntion to fetch adn render actors who have worked in the most movies
+function fetchAndRenderTopActorsInMovies() {
+    const ctx = document.getElementById("topActorsInMoviesChart").getContext("2d");
+
+    // Fetch top actors in movies from the Flask API
+    fetch('/api/top_movies_actors')
+        .then(response => response.json())
+        .then(actors => {
+            const actorNames = actors.map(actor => actor[0]); // Extract actor names
+            const movieCount = actors.map(actor => actor[1]); // Extract number of movies
+
+            // Create the bar chart
+            const topActorsInMoviesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: actorNames,
+                    datasets: [{
+                        label: 'Number of movies',
+                        data: movieCount,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)', // Blue bars
+                        borderColor: 'rgb(255, 255, 255)',
+                        borderWidth: 1,
+                        borderRadius: 8, // Rounded corners
+                        hoverBackgroundColor: "rgba(56, 56, 56, 0.8)"
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y', // Horizontal bar chart
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Movie Count',
+                                font: { size: 16, weight: 'bold' },
+                                color: '#4A5568'
+                            },
+                            ticks: {
+                                font: { size: 14, weight: 'bold' },
+                                color: '#2D3748'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Actor Name',
+                                font: { size: 16, weight: 'bold' },
+                                color: '#4A5568'
+                            },
+                            ticks: {
+                                font: { size: 14, weight: 'bold' },
+                                color: '#2D3748'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: 'white',
+                            bodyColor: 'white',
+                            borderColor: 'rgba(255, 255, 255, 0.8)',
+                            borderWidth: 1,
+                            padding: 12,
+                            titleFont: { weight: 'bold', size: 16 },
+                            bodyFont: { size: 14 }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    onClick: function (event, elements) {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const actorName = actorNames[index]; // Get the actor name
+                            window.open(`/fetch_actor_stats?actor=${encodeURIComponent(actorName)}`, '_blank'); // Open in new tab
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching top actors data:', error));
+}
+
+// Function to fetch and render directors who have worked in most movies
+function fetchAndRenderTopDirectorsInMovies() {
+    const ctx = document.getElementById("topDirectorsInMoviesChart").getContext("2d");
+
+    // Fetch top directors in movies from the Flask API
+    fetch('/api/top_movies_directors')
+        .then(response => response.json())
+        .then(directors => {
+            const directorNames = directors.map(director => director[0]); // Extract director names
+            const numOfMovies = directors.map(director => director[1]); // Extract number of movies
+
+            // Create the bar chart
+            const topDirectorsInMoviesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: directorNames,
+                    datasets: [{
+                        label: 'Number of Movies',
+                        data: numOfMovies,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)', // Red bars
+                        borderColor: 'rgb(255, 255, 255)',
+                        borderWidth: 1,
+                        borderRadius: 8, // Rounded corners
+                        hoverBackgroundColor: "rgba(56, 56, 56, 0.8)"
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y', // Horizontal bar chart
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Number of Movies',
+                                font: { size: 16, weight: 'bold' },
+                                color: '#4A5568'
+                            },
+                            ticks: {
+                                font: { size: 14, weight: 'bold' },
+                                color: '#2D3748'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Director Name',
+                                font: { size: 16, weight: 'bold' },
+                                color: '#4A5568'
+                            },
+                            ticks: {
+                                font: { size: 14, weight: 'bold' },
+                                color: '#2D3748'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: 'white',
+                            bodyColor: 'white',
+                            borderColor: 'rgba(255, 255, 255, 0.8)',
+                            borderWidth: 1,
+                            padding: 12,
+                            titleFont: { weight: 'bold', size: 16 },
+                            bodyFont: { size: 14 }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    onClick: function (event, elements) {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const directorName = directorNames[index]; // Get the director name
+                            window.open(`/fetch_director_stats?director=${encodeURIComponent(directorName)}`, '_blank'); // Open in new tab
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching top directors data:', error));
+}
+
+
+// WHen a genre is clicked, fetch movies for that genre and page
 function fetchMoviesByGenre(genre, page) {
     // Fetch movies for the selected genre and page
     fetch(`/api/get_movies_by_genre?genre=${genre}&page=${page}`)
@@ -199,13 +563,14 @@ function fetchMoviesByGenre(genre, page) {
         .catch(error => console.error('Error fetching movies:', error));
 }
 
+// Function to render movies and pagination buttons
 function renderMovies(movies, genre) {
     const movieList = document.getElementById('movie-list');
     movieList.innerHTML = ''; // Clear the previous movies
 
     // Display the genre at the top
     const genreElement = document.createElement('div');
-    genreElement.classList.add('text-2xl', 'font-semibold', 'text-gray-800', 'mb-4');
+    genreElement.classList.add('text-2xl', 'font-semibold', 'text-gray-600', 'mb-4');
     genreElement.innerHTML = `Movies in "${genre}" Genre`;
     movieList.appendChild(genreElement);
 
@@ -233,7 +598,7 @@ function renderMovies(movies, genre) {
     });
 }
 
-
+// Function to render pagination buttons
 function renderPagination(currentPage, totalPages, genre) {
     const paginationContainer = document.getElementById('pagination-container');
     paginationContainer.innerHTML = ''; // Clear the previous pagination
@@ -306,7 +671,9 @@ function renderPagination(currentPage, totalPages, genre) {
 // Run the function on page load
 window.onload = function() {
     fetchAndRenderGenreChart();
+    fetchAndRenderTopGrossingMovies();
+    fetchAndRenderTopRatedMovies();
+    fetchAndRenderTopActorsInMovies();
+    fetchAndRenderTopDirectorsInMovies();
 };
 
-
-// Define similar functions for actor and director charts.

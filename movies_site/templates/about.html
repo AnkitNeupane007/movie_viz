@@ -7,10 +7,6 @@
 	rel="stylesheet"
 	href="{{ url_for('static', filename='css/about.css') }}"
 />
-<link
-	rel="stylesheet"
-	href="{{ url_for('static', filename='css/popup.css') }}"
-/>
 {% endblock %}
 
 {% block content %}
@@ -38,6 +34,3 @@
 	</div>
 </div>{% endblock %}
 
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/base.js') }}"></script>
-{% endblock %}

@@ -716,4 +716,107 @@ def get_director_info(director):
 
     finally:
         conn.close()  
+
+
+def get_top_grossing_movies():
+    # Connect to the database
+    conn = get_db()
+    cursor = conn.cursor()
+
+    try:
+        # Query for the top 10 grossing movies
+        cursor.execute("""
+            SELECT title, revenue
+            FROM movies
+            ORDER BY revenue DESC
+            LIMIT 10
+        """)
+        movies = cursor.fetchall()
+
+        return movies  # List of tuples (title, revenue)
+    
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+        return None
+    
+    finally:
+        conn.close()
         
+def get_top_rated_movies():
+    # Connect to the database
+    conn = get_db()
+    cursor = conn.cursor()
+
+    try:
+        # Query for the top 10 rated movies (average rating)
+        cursor.execute("""
+            SELECT m.title, AVG(r.rating) AS avg_rating
+            FROM movies m
+            JOIN reviews r ON m.id = r.movie_id
+            GROUP BY m.id
+            ORDER BY avg_rating DESC
+            LIMIT 10
+        """)
+        movies = cursor.fetchall()
+
+        return movies  # List of tuples (title, avg_rating)
+    
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+        return None
+    
+    finally:
+        conn.close()
+        
+def get_top_actors_most_movies():
+    # Connect to the database
+    conn = get_db()
+    cursor = conn.cursor()
+
+    try:
+        # Query for the top 10 actors who appeared in the most movies
+        cursor.execute("""
+            SELECT a.name, COUNT(m.id) AS movie_count
+            FROM actors a
+            JOIN movie_cast mc ON a.id = mc.actor_id
+            JOIN movies m ON mc.movie_id = m.id
+            GROUP BY a.id
+            ORDER BY movie_count DESC
+            LIMIT 10
+        """)
+        actors = cursor.fetchall()
+
+        return actors  # List of tuples (actor_name, movie_count)
+    
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+        return None
+    
+    finally:
+        conn.close()
+        
+def get_top_directors_most_movies():
+    # Connect to the database
+    conn = get_db()
+    cursor = conn.cursor()
+
+    try:
+        # Query for the top 10 directors with the most movies
+        cursor.execute("""
+            SELECT d.name, COUNT(m.id) AS movie_count
+            FROM directors d
+            JOIN movies m ON d.id = m.director_id
+            GROUP BY d.id
+            ORDER BY movie_count DESC
+            LIMIT 10
+        """)
+        directors = cursor.fetchall()
+
+        return directors  # List of tuples (director_name, movie_count)
+    
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+        return None
+    
+    finally:
+        conn.close()
