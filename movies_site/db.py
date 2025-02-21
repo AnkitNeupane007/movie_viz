@@ -1,9 +1,8 @@
 import sqlite3
 from flask import current_app
-import sqlitecloud
 
 def get_db():
-    conn = sqlitecloud.connect("sqlitecloud://cjaiusi5hz.g5.sqlite.cloud:8860/movies.db?apikey=M8UmtG73vV7mtmmQpkhiywbqEA0Cd64a1k1zi1UG9A4")
+    conn = sqlite3.connect(current_app.config['DATABASE'])
     return conn
 
 
