@@ -99,32 +99,20 @@ function fetchAndRenderGenreChart() {
             const genres = Object.keys(ratingList);
             const ratings = Object.values(ratingList);
 
+            // Create gradient background for bars
+
             const genreChart = new Chart(ctx, {
                 type: "bar",
                 data: {
                     labels: genres,
                     datasets: [{
-                        label: "Average Rating",
+                        label: null,
                         data: ratings,
-                        backgroundColor: [
-                            'rgba(54, 162, 235, 0.6)',
-                            'rgba(75, 192, 192, 0.6)',
-                            'rgba(153, 102, 255, 0.6)',
-                            'rgba(255, 159, 64, 0.6)',
-                            'rgba(255, 99, 132, 0.6)',
-                            'rgba(255, 206, 86, 0.6)'
-                        ],
-                        borderColor: [
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)',
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(255, 206, 86, 1)'
-                        ],
-                        borderWidth: 1,
-                        hoverBackgroundColor: 'rgba(54, 162, 235, 0.8)', // Hover effect
-                        hoverBorderColor: 'rgba(54, 162, 235, 1)',  // Hover border color
+                        backgroundColor: "rgba(0, 0, 0, 0.8)", // Use gradient colors
+                        borderColor: "rgba(255, 255, 255, 0.8)",
+                        borderWidth: 2,
+                        borderRadius: 8, // Rounded corners
+                        hoverBackgroundColor: "rgba(56, 56, 56, 0.8)", // Prevent flickering
                     }]
                 },
                 options: {
@@ -134,7 +122,6 @@ function fetchAndRenderGenreChart() {
                         if (elements.length > 0) {
                             const genreClicked = genres[elements[0].index];
                             console.log("Genre clicked: ", genreClicked);
-                            // Call the backend to fetch movies of the clicked genre
                             fetchMoviesByGenre(genreClicked, 1);
                         }
                     },
@@ -143,54 +130,62 @@ function fetchAndRenderGenreChart() {
                             beginAtZero: true,
                             title: {
                                 display: true,
-                                text: 'Average Rating',
-                                font: {
-                                    size: 14
-                                }
+                                text: '⭐Average Rating',
+                                font: { size: 16, weight: "bold" },
+                                color: "#4A5568",
                             },
                             ticks: {
-                                stepSize: 0.5,
+                                stepSize: 1,
                                 max: 5,
-                            }
+                                font: { size: 14, weight: "bold" },
+                                color: "#2D3748",
+                            },
+                            grid: {
+                                display: false
+                            },
                         },
                         x: {
                             title: {
                                 display: true,
-                                text: 'Genre',
-                                font: {
-                                    size: 14
-                                }
-                            }
+                                text: '🎬Genre',
+                                font: { size: 16, weight: "bold" },
+                                color: "#4A5568",
+                            },
+                            ticks: {
+                                font: { size: 14, weight: "bold" },
+                                color: "#2D3748",
+                            },
+                            grid: {
+                                display: false,
+                            },
                         }
                     },
                     plugins: {
                         tooltip: {
                             enabled: true,
-                            backgroundColor: 'rgba(0, 0, 0, 0.7)', // Tooltip background
-                            titleColor: 'white',
-                            bodyColor: 'white',
-                            borderColor: 'rgba(255, 255, 255, 0.8)', // Tooltip border
+                            backgroundColor: "rgba(0, 0, 0, 0.8)",
+                            titleColor: "white",
+                            bodyColor: "white",
+                            borderColor: "rgba(255, 255, 255, 0.8)",
                             borderWidth: 1,
-                            padding: 10,
+                            padding: 12,
+                            titleFont: { weight: "bold", size: 16 },
+                            bodyFont: { size: 14 },
                         },
                         legend: {
-                            position: 'top',
-                            labels: {
-                                font: {
-                                    size: 14
-                                }
-                            }
+                            display: false
                         }
                     },
                     animation: {
-                        duration: 1000, // Smooth animation for bar rendering
-                        easing: 'easeOutQuart',
+                        duration: 1500,
+                        easing: "easeOutBounce",
                     }
                 }
             });
         })
         .catch(error => console.error('Error fetching ratings data:', error));
 }
+
 
 function fetchMoviesByGenre(genre, page) {
     // Fetch movies for the selected genre and page
