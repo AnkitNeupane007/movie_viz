@@ -11,13 +11,15 @@
     {% block styles %}{% endblock %}
 </head>
 
-<body class="bg-gray-100 font-sans bg-image">
+<body class="font-sans bg-image flex-col min-h-screen px-4 mx-auto">
     <!-- Navigation Bar -->
 	<header class="bg-black opacity-70 text-white text-bold fixed w-full top-0 left-0 z-50 shadow-md">
 		<div class="container mx-auto flex justify-between items-center p-4">
 			<div class="flex items-center space-x-4">
 				<a href="{{ url_for('views.home') }}" class="text-lg font-semibold hover:text-gray-400">Home</a>
 				<a href="{{ url_for('views.visualize') }}" class="text-lg font-semibold hover:text-gray-400">Visualizer</a>
+				<a href="{{ url_for('views.actors_and_directors') }}" class="text-lg font-semibold hover:text-gray-400">Creators</a>
+
 
 				{% if session.get('user_id') %}
 				<!-- Show Reviewer Dashboard link if logged in as a reviewer -->

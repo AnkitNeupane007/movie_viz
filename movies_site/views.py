@@ -88,6 +88,11 @@ def visualize():
     
     return render_template('visualizer.html')
 
+@views.route('/actorsanddirectors', methods=['GET', 'POST'])
+def actors_and_directors():
+    
+    return render_template('actors_and_directors.html')
+
 @views.route('/api/get_rating_by_genre', methods=['GET'])
 def get_rating_by_genre():
     genre = get_genres()
@@ -165,11 +170,11 @@ def fetch_actor_stats():
         actor = actor.strip().title()
         actor_stats = get_actor_info(actor)  # this return dictionary
         if isinstance(actor_stats, dict):  # Check if it is dictionary
-            return render_template('visualizer.html', actor_stats=actor_stats)
+            return render_template('actors_and_directors.html', actor_stats=actor_stats)
         else:
-            return render_template('visualizer.html', actor_stats=None)
+            return render_template('actors_and_directors.html', actor_stats=None)
     
-    return render_template('visualizer.html', actor_stats=None)
+    return render_template('actors_and_directors.html', actor_stats=None)
 
 @views.route('/fetch_director_stats', methods=['GET'])
 def fetch_director_stats():
@@ -179,11 +184,11 @@ def fetch_director_stats():
         director = director.strip().title()
         director_stats = get_director_info(director)
         if isinstance(director_stats, dict):
-            return render_template('visualizer.html', director_stats=director_stats)
+            return render_template('actors_and_directors.html', director_stats=director_stats)
         else:
-            return render_template('visualizer.html', director_stats=None)
+            return render_template('actors_and_directors.html', director_stats=None)
                 
-    return render_template('visualizer.html', director_stats=None)
+    return render_template('actors_and_directors.html', director_stats=None)
 
 @views.route('/compare_movies', methods=['GET'])
 def compare_movies():
