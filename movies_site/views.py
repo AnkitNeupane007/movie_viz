@@ -100,13 +100,6 @@ def get_rating_by_genre():
         
     return jsonify(rating_list)
 
-def get_actor_stats(actor):
-    
-    return "actor_stats"
-
-def get_director_stats(director):
-    
-    return "director_stats"
 
 @views.route('/api/get_movies_by_genre', methods=['GET'])
 def get_movies_by_genre():
@@ -167,40 +160,50 @@ def get_movies_by_genre():
 @views.route('/fetch_actor_stats', methods=['GET'])
 def fetch_actor_stats():
     actor = request.args.get('actor')
-    if actor:
-        actor_stats = get_actor_stats(actor)
-        
-        return render_template('visualizer.html', actor_stats=actor_stats)
-
+    
+    if check_actor(actor):
+        actor = actor.strip().title()
+        actor_stats = get_actor_info(actor)  # this return dictionary
+        if isinstance(actor_stats, dict):  # Check if it is dictionary
+            return render_template('visualizer.html', actor_stats=actor_stats)
+        else:
+            return render_template('visualizer.html', actor_stats=None)
+    
     return render_template('visualizer.html', actor_stats=None)
 
 @views.route('/fetch_director_stats', methods=['GET'])
 def fetch_director_stats():
     director = request.args.get('director')
     
-    if director:
-        director_stats = get_director_stats(director)
-            
-        return render_template('visualizer.html', director_stats=director_stats)
-    
+    if check_director(director):
+        director = director.strip().title()
+        director_stats = get_director_info(director)
+        if isinstance(director_stats, dict):
+            return render_template('visualizer.html', director_stats=director_stats)
+        else:
+            return render_template('visualizer.html', director_stats=None)
+                
     return render_template('visualizer.html', director_stats=None)
 
-@views.route('/compare_movies', methods=['GET', 'POST'])
+@views.route('/compare_movies', methods=['GET'])
 def compare_movies():
-    if request.method == 'POST':
-        movie1 = request.form.get('movie1')
-        movie2 = request.form.get('movie2')
-        
+    movie1 = request.args.get('movie1')
+    movie2 = request.args.get('movie2')
+
+    if movie1 and movie2:
+        # Check if movies exist in the database
         movie1_id = check_movie(movie1)
         movie2_id = check_movie(movie2)
-        
+
         if movie1_id and movie2_id:
+            # Fetch movie details using movie ids
             movie1_information = display_movie(movie1_id[0])
             movie2_information = display_movie(movie2_id[0])
-            
-            return render_template('visualize.html', movie1=movie1_information, movie2=movie2_information)
+
+            # Pass the movie details to the template for rendering
+            return render_template('visualizer.html', movie_comparison={'movie1': movie1_information, 'movie2': movie2_information})
         else:
-            flash('Movie not found', category='error')
+            flash('One or both movies not found', category='error')
             return redirect(url_for('views.visualize'))
-    
+
     return redirect(url_for('views.visualize'))

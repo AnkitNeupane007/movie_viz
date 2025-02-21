@@ -233,7 +233,7 @@ function renderMovies(movies, genre) {
     viewButtons.forEach(button => {
         button.addEventListener('click', function() {
             const movieTitle = this.getAttribute('data-title');
-            window.location.href = `/search?movie=${encodeURIComponent(movieTitle)}`;
+            window.open(`/search?movie=${encodeURIComponent(movieTitle)}`, '_blank');
         });
     });
 }

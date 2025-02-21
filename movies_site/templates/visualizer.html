@@ -38,9 +38,7 @@
 	<!-- Search Actor -->
 	<section class="bg-gray-900 shadow-lg rounded-lg p-6 mb-6">
 		<h3 class="text-xl font-semibold text-gray-700 mb-3">Search Actor</h3>
-		<form method="GET"
-		action="{{ url_for('views.fetch_actor_stats') }}"
-		>
+		<form method="GET" action="{{ url_for('views.fetch_actor_stats') }}">
 			<div class="flex items-center gap-4">
 				<div class="relative w-full">
 					<input
@@ -52,32 +50,93 @@
 						style="opacity:0.7;" onmouseover="this.style.opacity=1;" onmouseout="this.style.opacity=0.7;"
 						oninput="fetchActorSuggestions()"
 					/>
+					<ul id="actorSuggestions" class="absolute left-0 mt-1 w-full bg-gray-900 text-white border border-gray-700 rounded-md hidden z-10"></ul>
 					{% if actor_stats %}
-						<p>{{actor_stats}}</p>
+						<p class="mt-4 text-white">{{ actor_stats.actor }}'s Statistics</p>
+						<div class="space-y-4 mt-4">
+							<!-- Total Movies -->
+							<div class="bg-gray-800 p-4 rounded-lg">
+								<h4 class="text-lg font-semibold text-white">Total Movies</h4>
+								<p class="text-xl text-gray-400">{{ actor_stats.total_movies }}</p>
+							</div>
+	
+							<!-- Hits, Super Hits, and Flops -->
+							<div class="flex gap-4">
+								<div class="bg-gray-800 p-4 rounded-lg flex-1">
+									<h4 class="text-lg font-semibold text-white">Hits</h4>
+									<p class="text-xl text-green-500">{{ actor_stats.hits }}</p>
+								</div>
+								<div class="bg-gray-800 p-4 rounded-lg flex-1">
+									<h4 class="text-lg font-semibold text-white">Super Hits</h4>
+									<p class="text-xl text-yellow-500">{{ actor_stats.super_hits }}</p>
+								</div>
+								<div class="bg-gray-800 p-4 rounded-lg flex-1">
+									<h4 class="text-lg font-semibold text-white">Flops</h4>
+									<p class="text-xl text-red-500">{{ actor_stats.flops }}</p>
+								</div>
+							</div>
+	
+							<!-- Most Frequent Genre -->
+							<div class="bg-gray-800 p-4 rounded-lg">
+								<h4 class="text-lg font-semibold text-white">Most Frequent Genre</h4>
+								<p class="text-xl text-blue-400">{{ actor_stats.most_frequent_genre.genre }}</p>
+								<p class="text-sm text-gray-500">Appeared in {{ actor_stats.most_frequent_genre.count }} movies</p>
+							</div>
+	
+							<!-- Average Rating -->
+							<div class="bg-gray-800 p-4 rounded-lg">
+								<h4 class="text-lg font-semibold text-white">Average Rating</h4>
+								<p class="text-xl text-purple-400">{{ actor_stats.avg_rating | round(2) }}</p>
+							</div>
+	
+							<!-- Most Frequent Coactor -->
+							<div class="bg-gray-800 p-4 rounded-lg">
+								<h4 class="text-lg font-semibold text-white">Most Frequent Co-actor</h4>
+								<p class="text-xl text-teal-400">{{ actor_stats.most_frequent_coactor.actor }}</p>
+								<p class="text-sm text-gray-500">Appeared in {{ actor_stats.most_frequent_coactor.count }} movies together</p>
+							</div>
+	
+							<!-- Most Frequent Production Company -->
+							<div class="bg-gray-800 p-4 rounded-lg">
+								<h4 class="text-lg font-semibold text-white">Most Frequent Production Company</h4>
+								<p class="text-xl text-teal-400">{{ actor_stats.most_frequent_production_company.company }}</p>
+								<p class="text-sm text-gray-500">Worked with them on {{ actor_stats.most_frequent_production_company.count }} movies</p>
+							</div>
+	
+							<!-- Most Frequent Director -->
+							<div class="bg-gray-800 p-4 rounded-lg">
+								<h4 class="text-lg font-semibold text-white">Most Frequent Director</h4>
+								<p class="text-xl text-orange-400">{{ actor_stats.most_frequent_director.director }}</p>
+								<p class="text-sm text-gray-500">Directed them in {{ actor_stats.most_frequent_director.count }} movies</p>
+							</div>
+	
+							<!-- Best and Worst Movie -->
+							<div class="flex gap-4">
+								<div class="bg-gray-800 p-4 rounded-lg flex-1">
+									<h4 class="text-lg font-semibold text-white">Best Rated Movie</h4>
+									<p class="text-xl text-green-500">{{ actor_stats.best_movie.title }} ({{ actor_stats.best_movie.rating }})</p>
+								</div>
+								<div class="bg-gray-800 p-4 rounded-lg flex-1">
+									<h4 class="text-lg font-semibold text-white">Worst Rated Movie</h4>
+									<p class="text-xl text-red-500">{{ actor_stats.worst_movie.title }} ({{ actor_stats.worst_movie.rating }})</p>
+								</div>
+							</div>
+						</div>
+						{% else %}
+						<p class="mt-4 text-white">No actor statistics available</p>
 					{% endif %}
-					<ul id="actorSuggestions" 
-						class="absolute left-0 mt-1 w-full bg-gray-900 text-white border border-gray-700 rounded-md hidden z-10">
-					</ul>
 				</div>
-				<button
-					type="submit"
-					class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-				>
+				<button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
 					Search
 				</button>
 			</div>
 		</form>
-		<div class="w-full h-80 mt-4">
-			<canvas id="actorChart"></canvas>
-		</div>
 	</section>
 
 	<!-- Search Director -->
 	<section class="bg-gray-900 shadow-lg rounded-lg p-6 mb-6">
 		<h3 class="text-xl font-semibold text-gray-700 mb-3">Search Director</h3>
-		<form method="GET"
-		action="{{ url_for('views.fetch_director_stats') }}"
-		>
+		<form method="GET" action="{{ url_for('views.fetch_director_stats') }}">
 			<div class="flex items-center gap-4">
 				<div class="relative w-full">
 					<input
@@ -90,66 +149,159 @@
 						oninput="fetchDirectorSuggestions()"
 					/>
 
-					{% if director_stats %}
-						<p>{{director_stats}}</p>
-					{% endif %}
-					<ul id="directorSuggestions" 
+					<ul id="directorSuggestions"
 						class="absolute left-0 mt-1 w-full bg-gray-900 text-white border border-gray-700 rounded-md hidden z-10">
 					</ul>
+
+					{% if director_stats %}
+					<p class="mt-4 text-white">{{ director_stats.director }}'s Statistics</p>
+					<div class="space-y-4 mt-4">
+						<!-- Total Movies -->
+						<div class="bg-gray-800 p-4 rounded-lg">
+							<h4 class="text-lg font-semibold text-white">Total Movies</h4>
+							<p class="text-xl text-gray-400">{{ director_stats.total_movies }}</p>
+						</div>
+
+						<!-- Hits, Super Hits, and Flops -->
+						<div class="flex gap-4">
+							<div class="bg-gray-800 p-4 rounded-lg flex-1">
+								<h4 class="text-lg font-semibold text-white">Hits</h4>
+								<p class="text-xl text-green-500">{{ director_stats.hits }}</p>
+							</div>
+							<div class="bg-gray-800 p-4 rounded-lg flex-1">
+								<h4 class="text-lg font-semibold text-white">Super Hits</h4>
+								<p class="text-xl text-yellow-500">{{ director_stats.super_hits }}</p>
+							</div>
+							<div class="bg-gray-800 p-4 rounded-lg flex-1">
+								<h4 class="text-lg font-semibold text-white">Flops</h4>
+								<p class="text-xl text-red-500">{{ director_stats.flops }}</p>
+							</div>
+						</div>
+
+						<!-- Most Frequent Genre -->
+						<div class="bg-gray-800 p-4 rounded-lg">
+							<h4 class="text-lg font-semibold text-white">Most Frequent Genre</h4>
+							<p class="text-xl text-blue-400">{{ director_stats.most_frequent_genre.genre }}</p>
+							<p class="text-sm text-gray-500">Appeared in {{ director_stats.most_frequent_genre.count }} movies</p>
+						</div>
+
+						<!-- Average Rating -->
+						<div class="bg-gray-800 p-4 rounded-lg">
+							<h4 class="text-lg font-semibold text-white">Average Rating</h4>
+							<p class="text-xl text-purple-400">{{ director_stats.avg_rating | round(2) }}</p>
+						</div>
+
+						<!-- Most Frequent Actor -->
+						<div class="bg-gray-800 p-4 rounded-lg">
+							<h4 class="text-lg font-semibold text-white">Most Frequent Actor</h4>
+							<p class="text-xl text-teal-400">{{ director_stats.most_frequent_actor.actor }}</p>
+							<p class="text-sm text-gray-500">Appeared in {{ director_stats.most_frequent_actor.count }} movies together</p>
+						</div>
+
+						<!-- Best and Worst Movie -->
+						<div class="flex gap-4">
+							<div class="bg-gray-800 p-4 rounded-lg flex-1">
+								<h4 class="text-lg font-semibold text-white">Best Rated Movie</h4>
+								<p class="text-xl text-green-500">{{ director_stats.best_movie.title }} ({{ director_stats.best_movie.rating }})</p>
+							</div>
+							<div class="bg-gray-800 p-4 rounded-lg flex-1">
+								<h4 class="text-lg font-semibold text-white">Worst Rated Movie</h4>
+								<p class="text-xl text-red-500">{{ director_stats.worst_movie.title }} ({{ director_stats.worst_movie.rating }})</p>
+							</div>
+						</div>
+					</div>
+					{% else %}
+					<p class="mt-4 text-white">No director statistics available</p>
+					{% endif %}
 				</div>
-				<button
-					type="submit"
-					class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-				>
+				<button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
 					Search
 				</button>
 			</div>
 		</form>
-		<div class="w-full h-80 mt-4">
-			<canvas id="directorChart"></canvas>
-		</div>
+		
 	</section>
+
 
 	<!-- Compare Movies -->
-	<section class="bg-gray-900 shadow-lg rounded-lg p-6 mb-6">
-		<h3 class="text-xl font-semibold text-gray-700 mb-3">Compare Movies</h3>
-		<form onsubmit="event.preventDefault(); compareMovies();" method="POST"
-		action="{{ url_for('views.compare_movies') }}"
-		>
-			<div class="flex flex-col gap-4 relative">
-				<!-- First movie input -->
-				<div class="relative w-full">
-					<input type="text" id="movie1" name="movie1" placeholder="Enter first movie..."
-						class="text-black border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring focus:ring-blue-300" 
-						style="opacity:0.7;" onmouseover="this.style.opacity=1;" onmouseout="this.style.opacity=0.7;"
-						oninput="fetchMovieSuggestions('movie1')"
-					/>
-					<ul id="movie1Suggestions" 
-						class="absolute left-0 mt-1 w-full bg-gray-900 text-white border border-gray-700 rounded-md hidden z-10">
-					</ul>
-				</div>
+<section class="bg-gray-900 shadow-lg rounded-lg p-6 mb-6">
+    <h3 class="text-xl font-semibold text-gray-700 mb-3">Compare Movies</h3>
+    <form method="GET" action="{{ url_for('views.compare_movies') }}">
+        <div class="flex flex-col gap-4 relative">
+            <!-- First movie input -->
+            <div class="relative w-full">
+                <input type="text" id="movie1" name="movie1" placeholder="Enter first movie..."
+                    class="text-black border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring focus:ring-blue-300" 
+                    style="opacity:0.7;" onmouseover="this.style.opacity=1;" onmouseout="this.style.opacity=0.7;"
+                    oninput="fetchMovieSuggestions('movie1')"
+                />
+                <ul id="movie1Suggestions" 
+                    class="absolute left-0 mt-1 w-full bg-gray-900 text-white border border-gray-700 rounded-md hidden z-10">
+                </ul>
+            </div>
 
-				<!-- Second movie input -->
-				<div class="relative w-full">
-					<input type="text" id="movie2" name="movie2" placeholder="Enter second movie..."
-						class="text-black border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring focus:ring-blue-300" 
-						style="opacity:0.7;" onmouseover="this.style.opacity=1;" onmouseout="this.style.opacity=0.7;"
-						oninput="fetchMovieSuggestions('movie2')"
-					/>
-					<ul id="movie2Suggestions" 
-						class="absolute left-0 mt-1 w-full bg-gray-900 text-white border border-gray-700 rounded-md hidden z-10">
-					</ul>
-				</div>
+            <!-- Second movie input -->
+            <div class="relative w-full">
+                <input type="text" id="movie2" name="movie2" placeholder="Enter second movie..."
+                    class="text-black border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring focus:ring-blue-300" 
+                    style="opacity:0.7;" onmouseover="this.style.opacity=1;" onmouseout="this.style.opacity=0.7;"
+                    oninput="fetchMovieSuggestions('movie2')"
+                />
+                <ul id="movie2Suggestions" 
+                    class="absolute left-0 mt-1 w-full bg-gray-900 text-white border border-gray-700 rounded-md hidden z-10">
+                </ul>
+            </div>
 
-				<button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
-					Compare
-				</button>
+			{% if movie_comparison %}
+	<section class="movie-comparison bg-gray-900 shadow-lg rounded-lg p-8 mb-8">
+		<h3 class="text-3xl font-semibold text-gray-200 mb-6 text-center">Compare Movies</h3>
+
+		<div class="flex flex-col md:flex-row gap-8">
+			<!-- First Movie -->
+			<div class="movie bg-gray-800 text-white p-6 rounded-lg shadow-lg flex-1 hover:scale-105 transition-all ease-in-out duration-300">
+				<h4 class="text-2xl font-semibold text-gray-300 mb-4">{{ movie_comparison.movie1.title }}</h4>
+				
+				<div class="movie-details space-y-3">
+					<p><strong>Release Date:</strong> {{ movie_comparison.movie1.release_date }}</p>
+					<p><strong>Runtime:</strong> {{ movie_comparison.movie1.runtime }} minutes</p>
+					<p><strong>Genres:</strong> {{ movie_comparison.movie1.genres }}</p>
+					<p><strong>Rating:</strong> {{ movie_comparison.movie1.rating }}⭐</p>
+					<p><strong>Overview:</strong> {{ movie_comparison.movie1.overview }}</p>
+					<p><strong>Budget:</strong> ${{ "%.2f" | format( movie_comparison.movie1.budget/1000000)}}M</p>
+					<p><strong>Revenue:</strong> ${{ "%.2f" | format( movie_comparison.movie1.revenue/1000000)}}M</p>
+				</div>
 			</div>
-		</form>
-		<div class="w-full h-80 mt-4">
-			<canvas id="comparisonMovieChart"></canvas>
+
+			<!-- Second Movie -->
+			<div class="movie bg-gray-800 text-white p-6 rounded-lg shadow-lg flex-1 hover:scale-105 transition-all ease-in-out duration-300">
+				<h4 class="text-2xl font-semibold text-gray-300 mb-4">{{ movie_comparison.movie2.title }}</h4>
+				
+				<div class="movie-details space-y-3">
+					<p><strong>Release Date:</strong> {{ movie_comparison.movie2.release_date }}</p>
+					<p><strong>Runtime:</strong> {{ movie_comparison.movie2.runtime }} minutes</p>
+					<p><strong>Genres:</strong> {{ movie_comparison.movie2.genres }}</p>
+					<p><strong>Rating:</strong> {{ movie_comparison.movie2.rating }}⭐</p>
+					<p><strong>Overview:</strong> {{ movie_comparison.movie2.overview }}</p>
+					<p><strong>Budget:</strong> ${{ "%.2f" | format( movie_comparison.movie2.budget/1000000)}}M</p>
+					<p><strong>Revenue:</strong> ${{ "%.2f" | format( movie_comparison.movie2.revenue/1000000)}}M</p>
+				</div>
+			</div>
 		</div>
 	</section>
+{% else %}
+	<p class="text-gray-400 text-center mt-4">No movies to compare. Please try again.</p>
+{% endif %}
+
+		
+
+
+
+            <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+                Compare
+            </button>
+        </div>
+    </form>
+</section>
 
 	
 </div>

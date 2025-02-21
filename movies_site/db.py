@@ -348,3 +348,372 @@ def get_rating_per_genre(genre):
     
     return result[1] if result else None
 
+def check_actor(actor):
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    cursor.execute('SELECT id FROM actors WHERE LOWER(name) = LOWER(?)', (actor,))
+    
+    actor_id = cursor.fetchone()
+    
+    return actor_id
+
+def get_actor_info(actor):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    try:
+        # Get the actor's ID based on their name
+        cursor.execute("SELECT id FROM actors WHERE LOWER(name) = LOWER(?)", (actor,))
+        actor_id = cursor.fetchone()
+
+        if not actor_id:
+            return {"error": "Actor not found"}
+
+        actor_id = actor_id[0]
+
+        # Total number of movies the actor appeared in
+        cursor.execute('''
+            SELECT COUNT(*) FROM movie_cast
+            JOIN movies ON movie_cast.movie_id = movies.id
+            WHERE movie_cast.actor_id = ?
+        ''', (actor_id,))
+        total_movies = cursor.fetchone()[0]
+
+        # Number of "hits" (rating > 7)
+        cursor.execute('''
+            SELECT COUNT(*) FROM movie_cast
+            JOIN movies ON movie_cast.movie_id = movies.id
+            JOIN reviews ON movies.id = reviews.movie_id
+            WHERE movie_cast.actor_id = ? AND reviews.rating > 7
+        ''', (actor_id,))
+        hits = cursor.fetchone()[0]
+
+        # Number of "super hits" (rating > 9)
+        cursor.execute('''
+            SELECT COUNT(*) FROM movie_cast
+            JOIN movies ON movie_cast.movie_id = movies.id
+            JOIN reviews ON movies.id = reviews.movie_id
+            WHERE movie_cast.actor_id = ? AND reviews.rating > 9
+        ''', (actor_id,))
+        super_hits = cursor.fetchone()[0]
+
+        # Number of "flops" (rating < 5)
+        cursor.execute('''
+            SELECT COUNT(*) FROM movie_cast
+            JOIN movies ON movie_cast.movie_id = movies.id
+            JOIN reviews ON movies.id = reviews.movie_id
+            WHERE movie_cast.actor_id = ? AND reviews.rating < 5
+        ''', (actor_id,))
+        flops = cursor.fetchone()[0]
+
+        # Most frequent genre the actor has appeared in
+        cursor.execute('''
+            SELECT genres.name, COUNT(*) AS genre_count
+            FROM movie_cast
+            JOIN movie_genres ON movie_cast.movie_id = movie_genres.movie_id
+            JOIN genres ON movie_genres.genre_id = genres.id
+            WHERE movie_cast.actor_id = ?
+            GROUP BY genres.name
+            ORDER BY genre_count DESC
+            LIMIT 1
+        ''', (actor_id,))
+        most_frequent_genre = cursor.fetchone()
+
+        if most_frequent_genre:
+            genre_name = most_frequent_genre[0]
+            genre_count = most_frequent_genre[1]
+        else:
+            genre_name = "Unknown"
+            genre_count = 0
+
+        # Average rating of the actor's movies
+        cursor.execute('''
+            SELECT AVG(reviews.rating) FROM movie_cast
+            JOIN movies ON movie_cast.movie_id = movies.id
+            JOIN reviews ON movies.id = reviews.movie_id
+            WHERE movie_cast.actor_id = ?
+        ''', (actor_id,))
+        avg_rating = cursor.fetchone()[0]
+
+        # Most frequent cast member the actor has appeared with
+        cursor.execute('''
+            SELECT actors.name, COUNT(*) AS coactor_count
+            FROM movie_cast
+            JOIN movie_cast AS coactor_cast ON movie_cast.movie_id = coactor_cast.movie_id
+            JOIN actors ON coactor_cast.actor_id = actors.id
+            WHERE movie_cast.actor_id = ? AND actors.id != movie_cast.actor_id
+            GROUP BY actors.name
+            ORDER BY coactor_count DESC
+            LIMIT 1
+        ''', (actor_id,))
+        most_frequent_coactor = cursor.fetchone()
+
+        if most_frequent_coactor:
+            coactor_name = most_frequent_coactor[0]
+            coactor_count = most_frequent_coactor[1]
+        else:
+            coactor_name = "No co-actors found"
+            coactor_count = 0
+
+        # Most frequent production company the actor has worked with
+        cursor.execute('''
+            SELECT production_companies.name, COUNT(*) AS company_count
+            FROM movie_cast
+            JOIN movies ON movie_cast.movie_id = movies.id
+            JOIN production_companies ON movies.production_company_id = production_companies.id
+            WHERE movie_cast.actor_id = ?
+            GROUP BY production_companies.name
+            ORDER BY company_count DESC
+            LIMIT 1
+        ''', (actor_id,))
+        most_frequent_company = cursor.fetchone()
+
+        if most_frequent_company:
+            company_name = most_frequent_company[0]
+            company_count = most_frequent_company[1]
+        else:
+            company_name = "No production company found"
+            company_count = 0
+
+        # Most frequent director the actor has worked with
+        cursor.execute('''
+            SELECT directors.name, COUNT(*) AS director_count
+            FROM movie_cast
+            JOIN movies ON movie_cast.movie_id = movies.id
+            JOIN directors ON movies.director_id = directors.id
+            WHERE movie_cast.actor_id = ?
+            GROUP BY directors.name
+            ORDER BY director_count DESC
+            LIMIT 1
+        ''', (actor_id,))
+        most_frequent_director = cursor.fetchone()
+
+        if most_frequent_director:
+            director_name = most_frequent_director[0]
+            director_count = most_frequent_director[1]
+        else:
+            director_name = "No director found"
+            director_count = 0
+
+        # Best rated movie (highest rating)
+        cursor.execute('''
+            SELECT movies.title, MAX(reviews.rating) 
+            FROM movie_cast
+            JOIN movies ON movie_cast.movie_id = movies.id
+            JOIN reviews ON movies.id = reviews.movie_id
+            WHERE movie_cast.actor_id = ?
+        ''', (actor_id,))
+        best_movie = cursor.fetchone()
+        best_movie_title = best_movie[0] if best_movie else "No best movie"
+        best_movie_rating = best_movie[1] if best_movie else "N/A"
+
+        # Worst rated movie (lowest rating)
+        cursor.execute('''
+            SELECT movies.title, MIN(reviews.rating) 
+            FROM movie_cast
+            JOIN movies ON movie_cast.movie_id = movies.id
+            JOIN reviews ON movies.id = reviews.movie_id
+            WHERE movie_cast.actor_id = ?
+        ''', (actor_id,))
+        worst_movie = cursor.fetchone()
+        worst_movie_title = worst_movie[0] if worst_movie else "No worst movie"
+        worst_movie_rating = worst_movie[1] if worst_movie else "N/A"
+
+        # Return actor statistics
+        return {
+            "actor": actor,
+            "total_movies": total_movies,
+            "hits": hits,
+            "super_hits": super_hits,
+            "flops": flops,
+            "most_frequent_genre": {
+                "genre": genre_name,
+                "count": genre_count
+            },
+            "avg_rating": avg_rating if avg_rating else "No ratings available",
+            "most_frequent_coactor": {
+                "actor": coactor_name,
+                "count": coactor_count
+            },
+            "most_frequent_production_company": {
+                "company": company_name,
+                "count": company_count
+            },
+            "most_frequent_director": {
+                "director": director_name,
+                "count": director_count
+            },
+            "best_movie": {
+                "title": best_movie_title,
+                "rating": best_movie_rating
+            },
+            "worst_movie": {
+                "title": worst_movie_title,
+                "rating": worst_movie_rating
+            }
+        }
+
+    except sqlite3.Error as e:
+        return {"error": f"An error occurred: {e}"}
+
+    finally:
+        conn.close()
+        
+def check_director(director):
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    cursor.execute('SELECT id FROM directors WHERE LOWER(name) = LOWER(?)', (director,))
+    
+    director_id = cursor.fetchone()
+    
+    return director_id
+
+def get_director_info(director):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    try:
+        # Get the director's ID based on their name
+        cursor.execute("SELECT id FROM directors WHERE LOWER(name) = LOWER(?)", (director,))
+        director_id = cursor.fetchone()
+
+        if not director_id:
+            return {"error": "Director not found"}
+
+        director_id = director_id[0]
+
+        # Total number of movies the director has directed
+        cursor.execute(''' 
+            SELECT COUNT(*) FROM movies 
+            WHERE director_id = ?
+        ''', (director_id,))
+        total_movies = cursor.fetchone()[0]
+
+        # Number of "hits" (rating > 7)
+        cursor.execute(''' 
+            SELECT COUNT(*) FROM movies 
+            JOIN reviews ON movies.id = reviews.movie_id
+            WHERE movies.director_id = ? AND reviews.rating > 7
+        ''', (director_id,))
+        hits = cursor.fetchone()[0]
+
+        # Number of "super hits" (rating > 9)
+        cursor.execute(''' 
+            SELECT COUNT(*) FROM movies 
+            JOIN reviews ON movies.id = reviews.movie_id
+            WHERE movies.director_id = ? AND reviews.rating > 9
+        ''', (director_id,))
+        super_hits = cursor.fetchone()[0]
+
+        # Number of "flops" (rating < 5)
+        cursor.execute(''' 
+            SELECT COUNT(*) FROM movies 
+            JOIN reviews ON movies.id = reviews.movie_id
+            WHERE movies.director_id = ? AND reviews.rating < 5
+        ''', (director_id,))
+        flops = cursor.fetchone()[0]
+
+        # Most frequent genre the director has worked in
+        cursor.execute(''' 
+            SELECT genres.name, COUNT(*) AS genre_count
+            FROM movies
+            JOIN movie_genres ON movies.id = movie_genres.movie_id
+            JOIN genres ON movie_genres.genre_id = genres.id
+            WHERE movies.director_id = ?
+            GROUP BY genres.name
+            ORDER BY genre_count DESC
+            LIMIT 1
+        ''', (director_id,))
+        most_frequent_genre = cursor.fetchone()
+
+        if most_frequent_genre:
+            genre_name = most_frequent_genre[0]
+            genre_count = most_frequent_genre[1]
+        else:
+            genre_name = "Unknown"
+            genre_count = 0
+
+        # Average rating of the director's movies
+        cursor.execute(''' 
+            SELECT AVG(reviews.rating) FROM movies
+            JOIN reviews ON movies.id = reviews.movie_id
+            WHERE movies.director_id = ?
+        ''', (director_id,))
+        avg_rating = cursor.fetchone()[0]
+
+        # Most frequent actor the director has worked with
+        cursor.execute(''' 
+            SELECT actors.name, COUNT(*) AS actor_count
+            FROM movie_cast
+            JOIN movies ON movie_cast.movie_id = movies.id
+            JOIN actors ON movie_cast.actor_id = actors.id
+            WHERE movies.director_id = ?
+            GROUP BY actors.name
+            ORDER BY actor_count DESC
+            LIMIT 1
+        ''', (director_id,))
+        most_frequent_actor = cursor.fetchone()
+
+        if most_frequent_actor:
+            actor_name = most_frequent_actor[0]
+            actor_count = most_frequent_actor[1]
+        else:
+            actor_name = "No actor found"
+            actor_count = 0
+
+        # Best rated movie (highest rating)
+        cursor.execute(''' 
+            SELECT movies.title, MAX(reviews.rating) 
+            FROM movies
+            JOIN reviews ON movies.id = reviews.movie_id
+            WHERE movies.director_id = ?
+        ''', (director_id,))
+        best_movie = cursor.fetchone()
+        best_movie_title = best_movie[0] if best_movie else "No best movie"
+        best_movie_rating = best_movie[1] if best_movie else "N/A"
+
+        # Worst rated movie (lowest rating)
+        cursor.execute(''' 
+            SELECT movies.title, MIN(reviews.rating) 
+            FROM movies
+            JOIN reviews ON movies.id = reviews.movie_id
+            WHERE movies.director_id = ?
+        ''', (director_id,))
+        worst_movie = cursor.fetchone()
+        worst_movie_title = worst_movie[0] if worst_movie else "No worst movie"
+        worst_movie_rating = worst_movie[1] if worst_movie else "N/A"
+
+        # Return director statistics
+        return {
+            "director": director,
+            "total_movies": total_movies,
+            "hits": hits,
+            "super_hits": super_hits,
+            "flops": flops,
+            "most_frequent_genre": {
+                "genre": genre_name,
+                "count": genre_count
+            },
+            "avg_rating": avg_rating if avg_rating else "No ratings available",
+            "most_frequent_actor": {
+                "actor": actor_name,
+                "count": actor_count
+            },
+            "best_movie": {
+                "title": best_movie_title,
+                "rating": best_movie_rating
+            },
+            "worst_movie": {
+                "title": worst_movie_title,
+                "rating": worst_movie_rating
+            }
+        }
+
+    except sqlite3.Error as e:
+        return {"error": f"An error occurred: {e}"}
+
+    finally:
+        conn.close()  
+        
