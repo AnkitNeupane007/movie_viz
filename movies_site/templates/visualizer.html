@@ -1,0 +1,121 @@
+{% extends "base.html" %} {% block title %} Visualizer {% endblock %} {% block styles %}
+<link
+	rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+<link
+	rel="stylesheet"
+	href="{{ url_for('static', filename='css/visualizer.css') }}"
+/>{% endblock %} {% block content %}
+<div class="container">
+
+	<!-- Average Rating by Genre -->
+	<section class="bg-gray-900 shadow-lg rounded-lg p-6 mb-6">
+		<h3 class="text-xl font-semibold text-gray-600 text-center mb-3">
+			Average Rating by Genre
+		</h3>
+
+		<div class="w-full h-90 p-4">
+			<canvas id="genreChart" width="400" height="400"></canvas>
+		</div>
+
+		<div id="movie-list" class="space-y-4 p-4  rounded-lg shadow-lg">
+			<!-- Movie items will be inserted here dynamically -->
+		</div>
+		
+		<div id="pagination-container" class="flex justify-center items-center space-x-4 mt-6">
+			<!-- Pagination controls will be inserted here dynamically -->
+		</div>
+		
+
+		
+	</section>
+
+	
+
+
+	<!-- Compare Movies -->
+<section class="bg-gray-900 shadow-lg rounded-lg p-6 mb-6">
+    <h3 class="text-xl font-semibold text-gray-600 text-center mb-3">Compare Movies</h3>
+    <form method="GET" action="{{ url_for('views.compare_movies') }}">
+        <div class="flex flex-col gap-4 relative">
+            <!-- First movie input -->
+            <div class="relative w-full">
+                <input type="text" id="movie1" name="movie1" placeholder="Enter first movie..."
+                    class="text-black border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring focus:ring-blue-300" 
+                    style="opacity:0.7;" onmouseover="this.style.opacity=1;" onmouseout="this.style.opacity=0.7;"
+                    oninput="fetchMovieSuggestions('movie1')"
+                />
+                <ul id="movie1Suggestions" 
+                    class="absolute left-0 mt-1 w-full bg-gray-900 text-white border border-gray-700 rounded-md hidden z-10">
+                </ul>
+            </div>
+
+            <!-- Second movie input -->
+            <div class="relative w-full">
+                <input type="text" id="movie2" name="movie2" placeholder="Enter second movie..."
+                    class="text-black border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring focus:ring-blue-300" 
+                    style="opacity:0.7;" onmouseover="this.style.opacity=1;" onmouseout="this.style.opacity=0.7;"
+                    oninput="fetchMovieSuggestions('movie2')"
+                />
+                <ul id="movie2Suggestions" 
+                    class="absolute left-0 mt-1 w-full bg-gray-900 text-white border border-gray-700 rounded-md hidden z-10">
+                </ul>
+            </div>
+
+			{% if movie_comparison %}
+	<section class="movie-comparison bg-gray-900 shadow-lg rounded-lg p-8 mb-8">
+		<h3 class="text-3xl font-semibold text-gray-200 mb-6 text-center">Compare Movies</h3>
+
+		<div class="flex flex-col md:flex-row gap-8">
+			<!-- First Movie -->
+			<div class="movie bg-gray-800 text-white p-6 rounded-lg shadow-lg flex-1 hover:scale-105 transition-all ease-in-out duration-300">
+				<h4 class="text-2xl font-semibold text-gray-300 mb-4">{{ movie_comparison.movie1.title }}</h4>
+				
+				<div class="movie-details space-y-3">
+					<p><strong>Release Date:</strong> {{ movie_comparison.movie1.release_date }}</p>
+					<p><strong>Runtime:</strong> {{ movie_comparison.movie1.runtime }} minutes</p>
+					<p><strong>Genres:</strong> {{ movie_comparison.movie1.genres }}</p>
+					<p><strong>Rating:</strong> {{ movie_comparison.movie1.rating }}⭐</p>
+					<p><strong>Overview:</strong> {{ movie_comparison.movie1.overview }}</p>
+					<p><strong>Budget:</strong> ${{ "%.2f" | format( movie_comparison.movie1.budget/1000000)}}M</p>
+					<p><strong>Revenue:</strong> ${{ "%.2f" | format( movie_comparison.movie1.revenue/1000000)}}M</p>
+				</div>
+			</div>
+
+			<!-- Second Movie -->
+			<div class="movie bg-gray-800 text-white p-6 rounded-lg shadow-lg flex-1 hover:scale-105 transition-all ease-in-out duration-300">
+				<h4 class="text-2xl font-semibold text-gray-300 mb-4">{{ movie_comparison.movie2.title }}</h4>
+				
+				<div class="movie-details space-y-3">
+					<p><strong>Release Date:</strong> {{ movie_comparison.movie2.release_date }}</p>
+					<p><strong>Runtime:</strong> {{ movie_comparison.movie2.runtime }} minutes</p>
+					<p><strong>Genres:</strong> {{ movie_comparison.movie2.genres }}</p>
+					<p><strong>Rating:</strong> {{ movie_comparison.movie2.rating }}⭐</p>
+					<p><strong>Overview:</strong> {{ movie_comparison.movie2.overview }}</p>
+					<p><strong>Budget:</strong> ${{ "%.2f" | format( movie_comparison.movie2.budget/1000000)}}M</p>
+					<p><strong>Revenue:</strong> ${{ "%.2f" | format( movie_comparison.movie2.revenue/1000000)}}M</p>
+				</div>
+			</div>
+		</div>
+	</section>
+{% else %}
+	<p class="text-gray-400 text-center mt-4">No movies to compare. Please try again.</p>
+{% endif %}
+
+            <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+                Compare
+            </button>
+        </div>
+    </form>
+</section>
+
+	
+</div>
+{% endblock %} {% block scripts %}
+<script src="{{ url_for('static', filename='js/visualizer.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{% endblock %}

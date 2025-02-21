@@ -44,3 +44,42 @@ def update_user():
         flash('No user to update', category='error')
         
     return redirect(url_for('admin.admin_dashboard'))
+
+@admin.route('/add_movie', methods=['POST'])
+@role_required('admin')
+def add_movie():
+    
+    if request.method == 'POST':
+        title = request.form["title"]
+        release_date = request.form["release_date"]
+        runtime = request.form["runtime"]
+        tagline = request.form["tagline"]
+        overview = request.form["overview"]
+        budget = request.form["budget"]
+        revenue = request.form["revenue"]
+        original_language = request.form["original_language"]
+        director_name = request.form["director_name"]
+        production_company_name = request.form["production_company_name"]
+        production_company_country = request.form["production_company_country"]
+        cast_list = request.form["cast_list"]
+        genre_list = request.form["genre_list"]
+        
+        print(title, release_date, runtime, tagline, overview, budget, revenue, original_language, director_name, production_company_name, production_company_country, cast_list, genre_list)
+        
+        insert_movie_data(
+            title,
+            release_date,
+            runtime,
+            tagline,
+            overview,
+            budget,
+            revenue,
+            original_language,
+            director_name,
+            production_company_name,
+            production_company_country,
+            cast_list,
+            genre_list
+        )
+        
+        return redirect(url_for('admin.admin_dashboard'))

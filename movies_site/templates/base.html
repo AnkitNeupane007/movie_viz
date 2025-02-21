@@ -11,13 +11,16 @@
     {% block styles %}{% endblock %}
 </head>
 
-<body class="bg-gray-100 font-sans bg-image">
+<body class="font-sans bg-image flex-col min-h-screen px-4 mx-auto">
     <!-- Navigation Bar -->
 	<header class="bg-black opacity-70 text-white text-bold fixed w-full top-0 left-0 z-50 shadow-md">
 		<div class="container mx-auto flex justify-between items-center p-4">
 			<div class="flex items-center space-x-4">
 				<a href="{{ url_for('views.home') }}" class="text-lg font-semibold hover:text-gray-400">Home</a>
-		
+				<a href="{{ url_for('views.visualize') }}" class="text-lg font-semibold hover:text-gray-400">Visualizer</a>
+				<a href="{{ url_for('views.actors_and_directors') }}" class="text-lg font-semibold hover:text-gray-400">Creators</a>
+
+
 				{% if session.get('user_id') %}
 				<!-- Show Reviewer Dashboard link if logged in as a reviewer -->
 				{% if session.get('role') == 'reviewer' %}
@@ -106,7 +109,7 @@
     {% endwith %}
 
     <!-- Main Content -->
-    <div class="flex mx-auto mt-8 p-1">
+    <div class="flex mx-auto mt-10 p-1">
         {% block content %}
         <main class="container mx-auto mt-8 p-2">
             <h1 class="text-5xl text-white font-bold text-center mr-10 mb-4">Search Movies</h1>
@@ -139,26 +142,98 @@
                     </form>
                 </div>
             </div>
+        
 
             {% if information %}
-            <div class="card justify-center mx-auto mt-12">
-                <div class="content">
-                    <p><strong>Title:</strong> {{ information.title }}</p>
-                    <p><strong>Tagline:</strong> {{ information.tagline }}</p>
-                    <p><strong>Genre:</strong> {{ information.genres }}</p>
-                    <p><strong>Cast:</strong> {{ information.cast }}</p>
-                    <p><strong>Director:</strong> {{ information.directors }}</p>
-                    <p><strong>Release Date:</strong> {{ information.release_date }}</p>
-                    <p><strong>Runtime:</strong> {{ information.runtime }} minutes</p>
-                    <p><strong>Overview:</strong> {{ information.overview }}</p>
-                    <p><strong>Budget:</strong> ${{ "%.2f" | format(information.budget/1000000) }}M</p>
-                    <p><strong>Revenue:</strong> ${{ "%.2f" | format(information.revenue/1000000) }}M</p>
-                    <p><strong>Original Language:</strong> {{ information.original_language }}</p>
-                    <p><strong>Production Companies:</strong> {{ information.production_companies }}</p>
-                    <p><strong>Rating: </strong>{{ information.rating }}⭐</p>
+            <section class="bg-gray-900 shadow-lg rounded-lg p-6 mb-6">
+                <p class="mt-4 text-center text-white text-3xl font-semibold">{{ information.title }}</p>
+                <div class="space-y-4 mt-4">
+                    <!-- Tagline -->
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <h4 class="text-lg font-semibold text-white">Tagline</h4>
+                        <p class="text-xl text-gray-400">{{ information.tagline }}</p>
+                    </div>
+
+                    <!-- Genre -->
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <h4 class="text-lg font-semibold text-white">Genre</h4>
+                        <p class="text-xl text-gray-400">{{ information.genres }}</p>
+                    </div>
+
+                    <!-- Cast -->
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <h4 class="text-lg font-semibold text-white">Cast</h4>
+                        <p class="text-xl text-gray-400">{{ information.actors }}</p>
+                    </div>
+
+                    <!-- Director -->
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <h4 class="text-lg font-semibold text-white">Director</h4>
+                        <p class="text-xl text-gray-400">{{ information.director }}</p>
+                    </div>
+
+                    <!-- Release Date -->
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <h4 class="text-lg font-semibold text-white">Release Date</h4>
+                        <p class="text-xl text-gray-400">{{ information.release_date }}</p>
+                    </div>
+
+                    <!-- Runtime -->
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <h4 class="text-lg font-semibold text-white">Runtime</h4>
+                        <p class="text-xl text-gray-400">{{ information.runtime }} minutes</p>
+                    </div>
+
+                    <!-- Overview -->
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <h4 class="text-lg font-semibold text-white">Overview</h4>
+                        <p class="text-xl text-gray-400">{{ information.overview }}</p>
+                    </div>
+
+                    <!-- Budget -->
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <h4 class="text-lg font-semibold text-white">Budget</h4>
+                        <p class="text-xl text-gray-400">${{ "%.2f" | format(information.budget/1000000) }}M</p>
+                    </div>
+
+                    <!-- Revenue with Color Based on Comparison to Budget -->
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <h4 class="text-lg font-semibold text-white">Revenue</h4>
+                        <p class="text-xl 
+                            {% if information.revenue >= information.budget %}
+                                text-green-500 
+                            {% elif information.revenue >= (information.budget * 0.5) %}
+                                text-yellow-500 
+                            {% else %}
+                                text-red-500
+                            {% endif %}
+                        ">
+                            ${{ "%.2f" | format(information.revenue/1000000) }}M
+                        </p>
+                    </div>
+
+                    <!-- Original Language -->
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <h4 class="text-lg font-semibold text-white">Original Language</h4>
+                        <p class="text-xl text-gray-400">{{ information.original_language }}</p>
+                    </div>
+
+                    <!-- Production Company -->
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <h4 class="text-lg font-semibold text-white">Production Company</h4>
+                        <p class="text-xl text-gray-400">{{ information.production_company }}</p>
+                    </div>
+
+                    <!-- Rating with Dynamic Color -->
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <h4 class="text-lg font-semibold text-white">Rating</h4>
+                        <p class="text-xl {{ 'text-green-500' if information.rating >= 7 else 'text-yellow-500' if information.rating >= 5 else 'text-red-500' }}">
+                            {{ information.rating }}⭐
+                        </p>
+                    </div>
                 </div>
-            </div>
             {% endif %}
+        </section>
         </main>
         {% endblock %}
     </div>
