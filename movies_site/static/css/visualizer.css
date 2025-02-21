@@ -16,18 +16,21 @@ body {
  }   
 
 /* Apply some modern shadow and border styles to the chart container */
-#genreChart {
+.chart {
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Deep shadow for modern look */
     transition: all 0.3s ease;
     background-color: #000000; /* Light background for better contrast */
-    padding: 10px
+    padding: 10px;
 }
 
-#genreChart:hover {
+
+.chart:hover {
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2); /* Hover effect for depth */
     transform: scale(1.05); /* Slight zoom-in effect */
 }
+
+
 
 /* Style the canvas for a smoother and more polished background */
 canvas {
