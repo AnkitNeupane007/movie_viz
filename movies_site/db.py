@@ -217,3 +217,134 @@ def display_movie(movie_id):
         movie_information = dict(zip(columns, movie_information))
     
     return movie_information
+
+def insert_movie_data(
+    title,
+    release_date,
+    runtime,
+    tagline,
+    overview,
+    budget,
+    revenue,
+    original_language,
+    director_name,
+    production_company_name,
+    production_company_country,
+    cast_list,
+    genre_list
+):
+    # Connect to the database
+    conn = get_db()
+    cursor = conn.cursor()
+
+    try:
+        # Insert or get director ID
+        cursor.execute("INSERT OR IGNORE INTO directors (name) VALUES (?)", (director_name,))
+        cursor.execute("SELECT id FROM directors WHERE name = ?", (director_name,))
+        director_id = cursor.fetchone()[0]
+
+        # Insert or get production company ID
+        cursor.execute("INSERT OR IGNORE INTO production_companies (name, country) VALUES (?, ?)", (production_company_name, production_company_country),)
+        cursor.execute("SELECT id FROM production_companies WHERE name = ?", (production_company_name,))
+        production_company_id = cursor.fetchone()[0]
+
+        # Insert movie data
+        cursor.execute(
+            """
+            INSERT INTO movies 
+            (
+                title, release_date, runtime, tagline, overview, budget, revenue, original_language, director_id, production_company_id
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                title,
+                release_date,
+                runtime,
+                tagline,
+                overview,
+                budget,
+                revenue,
+                original_language,
+                director_id,
+                production_company_id,
+            ),
+        )
+        movie_id = cursor.lastrowid
+
+        # Insert cast data
+        for actor_name in cast_list.split(","):
+            actor_name = actor_name.strip()
+            cursor.execute("INSERT OR IGNORE INTO actors (name) VALUES (?)", (actor_name,))
+            cursor.execute("SELECT id FROM actors WHERE name = ?", (actor_name,))
+            actor_id = cursor.fetchone()[0]
+            cursor.execute("INSERT INTO movie_cast (movie_id, actor_id) VALUES (?, ?)", (movie_id, actor_id))
+
+        # Insert genre data
+        for genre_name in genre_list.split(","):
+            genre_name = genre_name.strip()
+            cursor.execute("INSERT OR IGNORE INTO genres (name) VALUES (?)", (genre_name,))
+            cursor.execute("SELECT id FROM genres WHERE name = ?", (genre_name,))
+            genre_id = cursor.fetchone()[0]
+            cursor.execute("INSERT INTO movie_genres (movie_id, genre_id) VALUES (?, ?)", (movie_id, genre_id))
+
+        # Insert review data with default values
+        cursor.execute("INSERT INTO reviews (movie_id, rating, vote_count) VALUES (?, 0, 0)", (movie_id,),)
+
+        # Commit changes
+        conn.commit()
+        # print("Movie data inserted successfully.")
+
+    except sqlite3.Error as e:
+        conn.rollback()
+        print(f"An error occurred: {e}")
+
+    conn.close()
+
+# # Example usage
+# insert_movie_data(
+#     db_path="movies.db",
+#     title="Knives Out",
+#     release_date="2019-11-27",
+#     runtime=130,
+#     tagline="Hell, any of them could have done it.",
+#     overview="When renowned crime novelist Harlan Thrombey is found dead at his estate just after his 85th birthday, the inquisitive and debonair Detective Benoit Blanc is mysteriously enlisted to investigate. From Harlan's dysfunctional family to his devoted staff, Blanc sifts through a web of red herrings and self-serving lies to uncover the truth behind Harlan's untimely death.",
+#     budget=40000000,
+#     revenue=311400000,
+#     original_language="en",
+#     director_name="Rian Johnson",
+#     production_company_name="Lionsgate",
+#     production_company_country="USA",
+#     cast_list="Daniel Craig, Chris Evans, Ana de Armas, Jamie Lee Curtis, Michael Shannon",
+#     genre_list="Comedy, Crime, Drama"
+# )
+
+def get_genres():
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    cursor.execute('SELECT name FROM genres ORDER BY name ASC')
+    
+    genres = cursor.fetchall()
+    
+    return genres
+
+def get_rating_per_genre(genre):
+    
+    conn = sqlite3.connect("instance/movies.db")
+    cursor = conn.cursor()
+    
+    cursor.execute(''' 
+                SELECT g.name AS genre, AVG(r.rating) AS avg_rating
+                FROM movies m
+                JOIN movie_genres mg ON m.id = mg.movie_id
+                JOIN genres g ON mg.genre_id = g.id
+                JOIN reviews r ON m.id = r.movie_id
+                WHERE LOWER(g.name) = LOWER(?)
+                GROUP BY g.name;
+                   ''', (genre,))
+    
+    result = cursor.fetchone()
+    
+    return result[1] if result else None
+

@@ -3,7 +3,7 @@
 	rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
 />
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
 <link
 	rel="stylesheet"
 	href="{{ url_for('static', filename='css/visualizer.css') }}"
@@ -14,17 +14,29 @@
 	</h2>
 
 	<!-- Average Rating by Genre -->
-	<section class="bg-gray-800 shadow-lg rounded-lg p-6 mb-6">
+	<section class="bg-gray-900 shadow-lg rounded-lg p-6 mb-6">
 		<h3 class="text-xl font-semibold text-gray-700 mb-3">
 			Average Rating by Genre
 		</h3>
-		<div class="w-full h-80">
-			<canvas id="genreChart"></canvas>
+
+		<div class="w-full h-80 p-4">
+			<canvas id="genreChart" width="400" height="200"></canvas>
 		</div>
+
+		<div id="movie-list" class="space-y-4 p-4  rounded-lg shadow-lg">
+			<!-- Movie items will be inserted here dynamically -->
+		</div>
+		
+		<div id="pagination-container" class="flex justify-center items-center space-x-4 mt-6">
+			<!-- Pagination controls will be inserted here dynamically -->
+		</div>
+		
+
+		
 	</section>
 
 	<!-- Search Actor -->
-	<section class="bg-gray-800 shadow-lg rounded-lg p-6 mb-6">
+	<section class="bg-gray-900 shadow-lg rounded-lg p-6 mb-6">
 		<h3 class="text-xl font-semibold text-gray-700 mb-3">Search Actor</h3>
 		<form method="GET"
 		action="{{ url_for('views.fetch_actor_stats') }}"
@@ -61,7 +73,7 @@
 	</section>
 
 	<!-- Search Director -->
-	<section class="bg-gray-800 shadow-lg rounded-lg p-6 mb-6">
+	<section class="bg-gray-900 shadow-lg rounded-lg p-6 mb-6">
 		<h3 class="text-xl font-semibold text-gray-700 mb-3">Search Director</h3>
 		<form method="GET"
 		action="{{ url_for('views.fetch_director_stats') }}"
@@ -99,7 +111,7 @@
 	</section>
 
 	<!-- Compare Movies -->
-	<section class="bg-gray-800 shadow-lg rounded-lg p-6 mb-6">
+	<section class="bg-gray-900 shadow-lg rounded-lg p-6 mb-6">
 		<h3 class="text-xl font-semibold text-gray-700 mb-3">Compare Movies</h3>
 		<form onsubmit="event.preventDefault(); compareMovies();" method="POST"
 		action="{{ url_for('views.compare_movies') }}"
@@ -144,5 +156,6 @@
 {% endblock %} {% block scripts %}
 <script src="{{ url_for('static', filename='js/visualizer.js') }}"></script>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 {% endblock %}
