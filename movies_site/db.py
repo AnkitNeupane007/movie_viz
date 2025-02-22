@@ -21,6 +21,20 @@ def get_password(email):
     else:
         return None
         
+def get_user_username(email):
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    cursor.execute('SELECT username FROM users WHERE email = ?', (email, ))
+    
+    result = cursor.fetchone()
+    conn.close()
+    
+    if result:
+        return result[0]
+    else:
+        return None
 
 def get_role(email):
     
@@ -114,6 +128,7 @@ def update_review(reviewer_rating, movie):
     ''', (reviewer_rating, movie))
     
     conn.commit()
+    conn.close()
     
 def check_movie(movie):
     conn = get_db()
@@ -122,6 +137,7 @@ def check_movie(movie):
     cursor.execute('SELECT id FROM movies WHERE LOWER(title) = LOWER(?)', (movie,))
     
     movie_id = cursor.fetchone()
+    conn.close()
     
     return movie_id
 
@@ -136,6 +152,8 @@ def search_movies(movie):
     if not movies:
         cursor.execute('SELECT title FROM movies WHERE title LIKE ? LIMIT 8', (f'%{movie}%', ))
         movies = cursor.fetchall()
+        
+    conn.close()
     
     return movies
 
@@ -151,6 +169,8 @@ def search_actors(actor):
         cursor.execute('SELECT name FROM actors WHERE name LIKE ? LIMIT 8', (f'%{actor}%', ))
         actors = cursor.fetchall()
         
+    conn.close()
+        
     return actors
 
 def search_directors(director):
@@ -164,6 +184,8 @@ def search_directors(director):
     if not directors:
         cursor.execute('SELECT name FROM directors WHERE name LIKE ? LIMIT 8', (f'%{director}%', ))
         directors = cursor.fetchall()
+        
+    conn.close()
         
     return directors
 
@@ -210,6 +232,8 @@ def display_movie(movie_id):
     
     # Fetch results
     movie_information = cursor.fetchone()
+    
+    conn.close()
 
     # Convert to dictionary
     if movie_information:
@@ -301,23 +325,7 @@ def insert_movie_data(
 
     conn.close()
 
-# # Example usage
-# insert_movie_data(
-#     db_path="movies.db",
-#     title="Knives Out",
-#     release_date="2019-11-27",
-#     runtime=130,
-#     tagline="Hell, any of them could have done it.",
-#     overview="When renowned crime novelist Harlan Thrombey is found dead at his estate just after his 85th birthday, the inquisitive and debonair Detective Benoit Blanc is mysteriously enlisted to investigate. From Harlan's dysfunctional family to his devoted staff, Blanc sifts through a web of red herrings and self-serving lies to uncover the truth behind Harlan's untimely death.",
-#     budget=40000000,
-#     revenue=311400000,
-#     original_language="en",
-#     director_name="Rian Johnson",
-#     production_company_name="Lionsgate",
-#     production_company_country="USA",
-#     cast_list="Daniel Craig, Chris Evans, Ana de Armas, Jamie Lee Curtis, Michael Shannon",
-#     genre_list="Comedy, Crime, Drama"
-# )
+
 
 def get_genres():
     conn = get_db()
@@ -326,6 +334,7 @@ def get_genres():
     cursor.execute('SELECT name FROM genres ORDER BY name ASC')
     
     genres = cursor.fetchall()
+    conn.close()
     
     return genres
 
@@ -346,6 +355,8 @@ def get_rating_per_genre(genre):
     
     result = cursor.fetchone()
     
+    conn.close()
+    
     return result[1] if result else None
 
 def check_actor(actor):
@@ -355,6 +366,7 @@ def check_actor(actor):
     cursor.execute('SELECT id FROM actors WHERE LOWER(name) = LOWER(?)', (actor,))
     
     actor_id = cursor.fetchone()
+    conn.close()
     
     return actor_id
 
@@ -567,6 +579,7 @@ def check_director(director):
     cursor.execute('SELECT id FROM directors WHERE LOWER(name) = LOWER(?)', (director,))
     
     director_id = cursor.fetchone()
+    conn.close()
     
     return director_id
 
@@ -820,3 +833,4 @@ def get_top_directors_most_movies():
     
     finally:
         conn.close()
+        

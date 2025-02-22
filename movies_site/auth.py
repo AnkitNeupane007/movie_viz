@@ -27,6 +27,7 @@ def login_user():
             
             session['user_id'] = email
             session['role'] = user_role
+            session['username'] = get_user_username(email)
             
             if user_role == 'admin' and role == user_role:
                 flash('Login Successfull', category='success')

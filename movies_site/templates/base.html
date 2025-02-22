@@ -46,7 +46,14 @@
             <!-- Right: User Info & Menu -->
             <div class="hidden md:flex items-center space-x-4">
                 {% if session.get('user_id') %}
-                <span>{{ session.get('user_id') }}</span>
+                <svg stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none"
+					viewBox="0 0 24 24" height="14" width="14" xmlns="http://www.w3.org/2000/svg">
+					<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+					<circle r="4" cy="7" cx="9"></circle>
+					<path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+					<path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+				</svg>
+                <span>{{ session.get('username') }}</span>
                 <a href="{{ url_for('auth.logout_user') }}" class="text-xl font-semibold hover:text-gray-400">Log
                     Out</a>
                 {% else %}
