@@ -56,7 +56,7 @@ git clone https://github.com/AnkitNeupane007/movie_viz.git
 <div style="display: flex;">
   <img src="./readme_images/home.png" width="250" style="margin-right: 10px;">
   <img src="./readme_images/creator.png" width="250">
-  <img src="./readme_images/compare.png" width="400">
+  <img src="./readme_images/compare.png" width="600">
 </div>
 - Users can Sign Up as a Reviewer through the `Sign Up` Page
 
