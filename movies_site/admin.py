@@ -64,7 +64,6 @@ def add_movie():
         cast_list = request.form["cast_list"]
         genre_list = request.form["genre_list"]
         
-        print(title, release_date, runtime, tagline, overview, budget, revenue, original_language, director_name, production_company_name, production_company_country, cast_list, genre_list)
         
         insert_movie_data(
             title,
