@@ -10,7 +10,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
     app.config['DATABASE'] = os.getenv('DATABASE_URL')
-    app.config['DEBUG'] = Faflse
+    app.config['DEBUG'] = False
     app.config['OMDB_API_KEY'] = os.getenv('OMDB_API_KEY')
     app.config['TMDB_API_KEY'] = os.getenv('TMDB_API_KEY')
     # Kun route ma jaani register garna lai
