@@ -2,8 +2,62 @@ from flask import Blueprint, jsonify, render_template, request, redirect, url_fo
 import sqlite3
 from .db import *
 import random
+import requests
 
 views = Blueprint('views', __name__)
+
+def get_poster(movie_name):
+    """Fetch the movie poster from OMDb API"""
+    
+    if not movie_name:
+        return None  # Handle empty input
+
+    url = f"https://www.omdbapi.com/?t={movie_name}&apikey={current_app.config.get('OMDB_API_KEY')}"
+    
+    try:
+        response = requests.get(url, timeout=5).json()  # Set a timeout for API request
+        
+        if response.get("Response") == "True":
+            return response.get("Poster")  # Return poster URL if found
+
+    except requests.RequestException as e:
+        current_app.logger.error(f"OMDb API request failed: {e}")  # Log errors
+
+    return None  # Return None if poster is not found
+
+def get_person_image(person_name):
+    """Fetch an image of an actor or director using TMDb API."""
+    
+    if not person_name:
+        return None
+
+    # Construct the TMDb API URL with the query
+    tmdb_url = f"https://api.themoviedb.org/3/search/person?query={person_name}&api_key={current_app.config.get('TMDB_API_KEY')}"
+
+    try:
+        # Request data from the API
+        response = requests.get(tmdb_url, timeout=5).json()
+
+        # Check if 'results' key exists and is non-empty
+        if 'results' in response and response["results"]:
+            # Get the profile image path from the first result
+            profile_path = response["results"][0].get("profile_path")
+            
+            if profile_path:  # Ensure profile_path is not None or empty
+                TMDB_IMAGE_URL = "https://image.tmdb.org/t/p/w185"
+                return f"{TMDB_IMAGE_URL}{profile_path}"
+            else:
+                current_app.logger.warning(f"No profile image found for {person_name}.")
+                return None
+        else:
+            current_app.logger.warning(f"No results found for {person_name}.")
+            return None
+
+    except requests.RequestException as e:
+        current_app.logger.error(f"TMDb API request failed: {e}")
+        return None
+
+
 
 @views.route('/')
 def home():
@@ -22,8 +76,10 @@ def search_movie():
         if check_movie(movie):
             movie_id = check_movie(movie)[0]
             movie_information = display_movie(movie_id)
+            movie_image = get_poster(movie)
+            print(type(movie_image))
             
-            return render_template('base.html', information=movie_information)
+            return render_template('base.html', information=movie_information, movie_image=movie_image)
         else:
             flash('Movie not found', category='error')
             return redirect(url_for('views.home'))
@@ -33,8 +89,9 @@ def search_movie():
     if movie and check_movie(movie):
         movie_id = check_movie(movie)[0]
         movie_information = display_movie(movie_id)
+        movie_image = get_poster(movie)
         
-        return render_template('base.html', information=movie_information)
+        return render_template('base.html', information=movie_information, movie_image=movie_image)
     else:
         flash('Movie not found', category='error')
         return redirect(url_for('views.home'))
@@ -78,8 +135,9 @@ def random_movie():
         movie_id = random.randint(1, 2951)
         
         movie_information = display_movie(movie_id)
+        movie_image = get_poster(movie_information['title'])
                     
-        return render_template('base.html', information=movie_information)
+        return render_template('base.html', information=movie_information, movie_image=movie_image)
         
     return redirect(url_for('views.home'))
 
@@ -169,8 +227,9 @@ def fetch_actor_stats():
     if check_actor(actor):
         actor = actor.strip().title()
         actor_stats = get_actor_info(actor)  # this return dictionary
+        actor_image = get_person_image(actor)
         if isinstance(actor_stats, dict):  # Check if it is dictionary
-            return render_template('actors_and_directors.html', actor_stats=actor_stats)
+            return render_template('actors_and_directors.html', actor_stats=actor_stats, actor_image=actor_image)
         else:
             return render_template('actors_and_directors.html', actor_stats=None)
     
@@ -183,8 +242,9 @@ def fetch_director_stats():
     if check_director(director):
         director = director.strip().title()
         director_stats = get_director_info(director)
+        director_image = get_person_image(director)
         if isinstance(director_stats, dict):
-            return render_template('actors_and_directors.html', director_stats=director_stats)
+            return render_template('actors_and_directors.html', director_stats=director_stats, director_image=director_image)
         else:
             return render_template('actors_and_directors.html', director_stats=None)
                 

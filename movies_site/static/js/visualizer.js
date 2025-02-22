@@ -604,7 +604,7 @@ function renderPagination(currentPage, totalPages, genre) {
     paginationContainer.innerHTML = ''; // Clear the previous pagination
 
     const paginationWrapper = document.createElement('div');
-    paginationWrapper.classList.add('flex', 'items-center', 'space-x-4');
+    paginationWrapper.classList.add('flex', 'flex-wrap', 'justify-center', 'items-center', 'space-x-4', 'space-y-2'); // Add flex-wrap for smaller screens
 
     // Previous Button
     if (currentPage > 1) {
@@ -642,10 +642,10 @@ function renderPagination(currentPage, totalPages, genre) {
 
     // Go to page input box
     const pageInputWrapper = document.createElement('div');
-    pageInputWrapper.classList.add('flex', 'items-center', 'space-x-2');
+    pageInputWrapper.classList.add('flex', 'items-center', 'space-x-2', 'mt-4', 'justify-center'); // Center the input on small screens
     const pageInput = document.createElement('input');
     pageInput.type = 'number';
-    pageInput.classList.add('bg-white', 'border', 'border-gray-300', 'rounded-md', 'px-3', 'py-2', 'text-gray-700');
+    pageInput.classList.add('bg-white', 'border', 'border-gray-300', 'rounded-md', 'px-3', 'py-2', 'text-gray-700', 'w-20', 'sm:w-32'); // Small input width by default
     pageInput.placeholder = `Go to page`;
     pageInput.min = 1;
     pageInput.max = totalPages;
@@ -667,6 +667,7 @@ function renderPagination(currentPage, totalPages, genre) {
     paginationContainer.appendChild(paginationWrapper);
     paginationContainer.appendChild(pageInputWrapper);
 }
+
 
 // Run the function on page load
 window.onload = function() {

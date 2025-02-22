@@ -1,6 +1,5 @@
 body {
-    background: linear-gradient(to right, #1c1c1c, #343434);
-    background-image: url('../images/background.png');
+	background-color: rgba(22, 21, 20, 0.829);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
