@@ -140,9 +140,11 @@
 /* home page background image */
 .bg-image {
     position: relative;
-    background-image: url('../images/background.png');
+    /* background-image: url('../images/background.png'); */
     background-size: cover;
     background-position: center;
+	background-color: rgba(22, 21, 20, 0.829);
+	background: linear-gradient(145deg, #000000, #272727, #0e0e0e, #272727);
 }
 
 .bg-image::before {

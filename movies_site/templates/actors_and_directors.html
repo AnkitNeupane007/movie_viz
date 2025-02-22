@@ -35,7 +35,18 @@
 						Search
 					</button>
 					{% if actor_stats %}
-						<p class="mt-4 text-white">{{ actor_stats.actor }}'s Statistics</p>
+
+					{% if actor_image %}
+					<div class="flex justify-center">
+					<img src="{{actor_image}}" alt="{{actor_stats.actor}}" 
+					class="mt-4 rounded-lg h-50"
+					 >
+					 </div>
+
+					{% endif %}
+					<div class="flex justify-center">
+						<p class="mt-4 text-white text-xl text-bold">{{ actor_stats.actor }}</p>
+					</div>
 						<div class="space-y-4 mt-4">
 							<!-- Total Movies -->
 							<div class="bg-gray-800 p-4 rounded-lg">
@@ -140,7 +151,18 @@
 					</button>
 
 					{% if director_stats %}
-					<p class="mt-4 text-white">{{ director_stats.director }}'s Statistics</p>
+					{% if director_image %}
+					<div class="flex justify-center">
+					<img src="{{director_image}}" alt="{{director_stats.director}}" 
+					class="mt-4 rounded-lg h-50"
+					 >
+
+					{% endif %}
+					</div>
+
+					<div class="flex justify-center">
+						<p class="mt-4 text-white text-xl text-bold">{{ director_stats.director }}</p>
+					</div>
 					<div class="space-y-4 mt-4">
 						<!-- Total Movies -->
 						<div class="bg-gray-800 p-4 rounded-lg">
