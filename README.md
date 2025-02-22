@@ -30,7 +30,7 @@ git clone https://github.com/AnkitNeupane007/movie_viz.git
         SECRET_KEY = 'your_secret_key'
         DATABASE_URL = 'your_db_url'
         OMDB_API_KEY = 'ombd_key'
-        TMDB_API_KEY = 'tmdb_key
+        TMDB_API_KEY = 'tmdb_key'
         ```
     - Run the Following Python Command in Your Terminal<br>
     ```
@@ -53,11 +53,15 @@ git clone https://github.com/AnkitNeupane007/movie_viz.git
 ### User's
 - User's don't need to do Login/Register if they want to View Movie Details
 - Users can view Movie Details in the `Home` Page, Visualizations in the `Visualization` Page, Actors and Directors in the `Creation` Page
+
+
 <div style="display: flex;">
   <img src="./readme_images/home.png" width="250" style="margin-right: 10px;">
   <img src="./readme_images/creator.png" width="250">
   <img src="./readme_images/compare.png" width="600">
 </div>
+<br>
+
 - Users can Sign Up as a Reviewer through the `Sign Up` Page
 
 
@@ -72,6 +76,7 @@ git clone https://github.com/AnkitNeupane007/movie_viz.git
 
 - Reviewer's can Review Movies Through `Dashboard`
 
+
 <img src="./readme_images/dashboard.png" width="600" />
 
 ### Admin
@@ -80,4 +85,3 @@ git clone https://github.com/AnkitNeupane007/movie_viz.git
   <img src="./readme_images/usercontrol.png" width="400" style="margin-right: 10px;">
   <img src="./readme_images/movieinsert.png" width="400">
 </div>
-
