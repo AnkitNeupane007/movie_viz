@@ -4,11 +4,8 @@ body {
     background-color: rgba(22, 21, 20, 0.829);
 	background: linear-gradient(145deg, #000000, #272727, #0e0e0e, #272727);
     color: white;
-    text-align: center;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     margin: 0;
     padding: 20px; /* Ensure padding for mobile views */
     perspective: 1500px; /* Adding perspective for subtle depth */

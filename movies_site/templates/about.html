@@ -11,25 +11,28 @@
 
 {% block content %}
 <div class="about-container">
-	<h1 class="about-title">Meet Our Team</h1>
+	<div class="flex text-center">
+		<h1 class="about-title">Meet Our Team</h1>
+	</div>
 	<div class="team-section">
 		<div class="team-card">
 			<img src="{{ url_for('static', filename='./images/ankit.png') }}" alt="Ankit Neupane">
 			<h3>Ankit Neupane</h3>
 			<p>Lead Developer</p>
-			<p>The mastermind behind the architecture of our database and website.</p>
+			<p>Backend, Visualization and Website Hosting
+			</p>
 		</div>
 		<div class="team-card">
 			<img src="{{ url_for('static', filename='images/abhijeet.png') }}" alt="Abhijeet K.C">
 			<h3>Abhijeet K.C.</h3>
 			<p>UI/UX Designer</p>
-			<p>Designed the stunning visuals and smooth user experience of our site.</p>
+			<p>Responsive Frontend & UI Design</p>
 		</div>
 		<div class="team-card">
 			<img src="{{ url_for('static', filename='images/aaditya.png') }}" alt="Aaditya Joshi">
 			<h3>Aaditya Joshi</h3>
 			<p>Data Administrator</p>
-			<p>Handled database optimization.</p>
+			<p>Data Cleaning, Database Creation and Queries </p>
 		</div>
 	</div>
 </div>{% endblock %}
